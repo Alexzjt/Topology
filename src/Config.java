@@ -6,4 +6,5 @@ public class Config {
 	public static String MAP_MID="D:\\zjt\\重庆地图\\Rchongqing.mid";	   //.mid文件的存储路径
 	public static String STATION="D:\\zjt\\station.csv";	   //收费站文件的存储路径
 	public static String TACHYMETER="D:\\zjt\\CSY.txt";	   //测速仪文件的存储路径
+	public static int HIGHWAY_COUNT=14000;    //从之前的数据了解到，高速公路路链总共是14000条左右
 }
