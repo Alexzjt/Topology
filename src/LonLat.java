@@ -10,4 +10,9 @@ public class LonLat {
 		longitude=Double.valueOf(array[0]);
 		latitude=Double.valueOf(array[1]);
 	}
+	@Override
+	public String toString() {
+		return String.valueOf(longitude)+","+String.valueOf(latitude);
+	}
+	
 }

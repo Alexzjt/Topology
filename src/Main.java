@@ -107,7 +107,17 @@ public class Main {
 			}
 			//
 			System.out.println("请输入首个路链的ID");
+			String input_RoadLink_ID=in.next();
+			RoadLink loop_RoadLink=id_RoadLink.get(input_RoadLink_ID);
+			String loop_Node_ID=loop_RoadLink.direction==2?loop_RoadLink.SnodeID:loop_RoadLink.EnodeID;
+			double loop_length=0;
+			List<LonLat> loop_lonLat_list=new ArrayList<LonLat>();
+			HashMap<String,RoadSegment> id_RoadSegment=new HashMap<String,RoadSegment>();
+			HashMap<String,List<String>> id_nextID_List=new HashMap<String,List<String>>();
 			
+			while(loop_Node_ID!=null){
+				
+			}
 			
 			file_mid.close();
 			file_mif.close();
