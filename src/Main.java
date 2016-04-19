@@ -5,6 +5,7 @@ public class Main {
 	public static void main(String[] args){
 		//暂时先写在这里吧，目前没仔细想如何函数化代码
 		try{
+			Scanner in = new Scanner(System.in);
 			BufferedReader file_mid = new BufferedReader(new FileReader(Config.MAP_MID));
 			BufferedReader file_mif = new BufferedReader(new FileReader(Config.MAP_MIF));
 			int line=0,mif_kuai=0;
@@ -13,6 +14,8 @@ public class Main {
 			HashMap<String,RoadLink> id_RoadLink=new HashMap<String,RoadLink>();
 			HashMap<String,List<String>> seNodeID_IDArray=new HashMap<String,List<String>>();
 			HashMap<Integer,RoadLink> line_RoadLink=new HashMap<Integer,RoadLink>();
+			HashMap<String,List<String>> s2E_hash=new HashMap<String,List<String>>();
+			HashMap<String,List<String>> e2S_hash=new HashMap<String,List<String>>();
 			String s;
 			while((s=file_mid.readLine())!=null){
 				line++;
@@ -23,12 +26,14 @@ public class Main {
 					RoadLink temp_RoadLink=new RoadLink(s_array);
 					id_RoadLink.put(s_array[2],temp_RoadLink);
 					//此处需要判断道路的方向，2是从SNode到ENode，3是从ENode到SNode。一般情况下就这两种选择。
-					String nodeID;
+					String nodeID,end_nodeID;
 					if(s_array[6].equals("2")){//顺行
 						nodeID=s_array[10];
+						end_nodeID=s_array[11];
 					}
 					else{//逆行
 						nodeID=s_array[11];
+						end_nodeID=s_array[10];
 					}
 					if(seNodeID_IDArray.containsKey(nodeID)){
 						List<String> temp_array=seNodeID_IDArray.get(nodeID);
@@ -42,6 +47,26 @@ public class Main {
 						seNodeID_IDArray.put(nodeID,temp_array);
 					}
 					line_RoadLink.put(line,temp_RoadLink);
+					if(s2E_hash.containsKey(nodeID)){
+						List<String> temp_array=s2E_hash.get(nodeID);
+						temp_array.add(end_nodeID);
+						s2E_hash.put(nodeID,temp_array);
+					}
+					else {
+						List<String> temp_array=new ArrayList<String>(2);
+						temp_array.add(end_nodeID);
+						s2E_hash.put(nodeID,temp_array);
+					}
+					if(e2S_hash.containsKey(end_nodeID)){
+						List<String> temp_array=e2S_hash.get(end_nodeID);
+						temp_array.add(nodeID);
+						e2S_hash.put(end_nodeID,temp_array);
+					}
+					else {
+						List<String> temp_array=new ArrayList<String>(2);
+						temp_array.add(nodeID);
+						e2S_hash.put(end_nodeID,temp_array);
+					}
 				}
 			}
 			while((s=file_mif.readLine())!=null){
@@ -80,7 +105,8 @@ public class Main {
 					lonLat_array.add(s);
 				}
 			}
-			
+			//
+			System.out.println("请输入首个路链的ID");
 			
 			
 			file_mid.close();
