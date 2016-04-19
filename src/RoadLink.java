@@ -1,3 +1,4 @@
+import java.util.List;
 
 public class RoadLink {
 	int speed_upbound,speed_lowbound,lane,direction,line;
@@ -5,7 +6,7 @@ public class RoadLink {
 	boolean isRamp;
 	char road_attribute;
 	String ID,highway_ID,SnodeID,EnodeID;
-	LonLat[] lonlat;
+	List<LonLat> lonlat_list;
 	RoadLink(String line){
 		String[] line_array=line.split("\",\"|\"");
 		int[] speed=RoadLink.speed_judge(Integer.valueOf(line_array[5]));

@@ -5,4 +5,9 @@ public class LonLat {
 		longitude=Double.valueOf(str1);
 		latitude=Double.valueOf(str2);
 	}
+	LonLat(String str){
+		String[] array=str.split(" ");
+		longitude=Double.valueOf(array[0]);
+		latitude=Double.valueOf(array[1]);
+	}
 }

@@ -7,7 +7,8 @@ public class Main {
 		try{
 			BufferedReader file_mid = new BufferedReader(new FileReader(Config.MAP_MID));
 			BufferedReader file_mif = new BufferedReader(new FileReader(Config.MAP_MIF));
-			int line=0;
+			int line=0,mif_kuai=0;
+			List<String> lonLat_array=new ArrayList<String>();
 			List<Integer> highway_lines=new ArrayList<Integer>(Config.HIGHWAY_COUNT);
 			HashMap<String,RoadLink> id_RoadLink=new HashMap<String,RoadLink>();
 			HashMap<String,List<String>> seNodeID_IDArray=new HashMap<String,List<String>>();
@@ -26,7 +27,7 @@ public class Main {
 					if(s_array[6].equals("2")){//Ë³ÐÐ
 						nodeID=s_array[10];
 					}
-					else if(s_array[6].equals("2")){//ÄæÐÐ
+					else{//ÄæÐÐ
 						nodeID=s_array[11];
 					}
 					if(seNodeID_IDArray.containsKey(nodeID)){
@@ -43,14 +44,53 @@ public class Main {
 					line_RoadLink.put(line,temp_RoadLink);
 				}
 			}
+			while((s=file_mif.readLine())!=null){
+				if(s.contains("Line")||s.contains("Pline")){         
+					mif_kuai++;
+					lonLat_array.clear();
+					lonLat_array.add(s);
+				}
+				else if(s.contains("Pen")){
+					if(highway_lines.contains(mif_kuai)){
+						List<LonLat> lonLat_list=new ArrayList<LonLat>();
+						int count=0;
+						String lon=null,lat=null;
+						for(String x : lonLat_array){
+							String[] array_x=x.split(" ");
+							for(String str : array_x){
+								if(str.contains(".")){
+									count++;
+									if(count%2!=0){
+										lon=str;
+									}
+									else{
+										lat=str;
+										lonLat_list.add(new LonLat(lon,lat));
+									}
+								}
+							}
+						}
+						RoadLink temp_RoadLink=line_RoadLink.get(mif_kuai);
+						temp_RoadLink.lonlat_list=lonLat_list;
+						line_RoadLink.put(mif_kuai,temp_RoadLink);
+						id_RoadLink.put(temp_RoadLink.ID,temp_RoadLink);
+					}
+				}
+				else{
+					lonLat_array.add(s);
+				}
+			}
 			
+			
+			
+			file_mid.close();
+			file_mif.close();
 		}
 		catch(Exception e){
 			e.printStackTrace();
 		}
 		finally{
-			file_mid.close();
-			file_mif.close();
+			
 		}
 	}
 	
