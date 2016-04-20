@@ -182,7 +182,15 @@ public class Main {
 			}
 			*/
 			
-			
+			//从这里起，为每个路链配置next属性。采用惯用手法BFS。
+			ArrayDeque<RoadLink> roadLink_queue=new ArrayDeque<RoadLink>();
+			roadLink_queue.add(id_RoadLink.get(Config.START_ROADLINK_ID));
+			while(roadLink_queue.size()!=0){
+				RoadLink loop_RoadLink=roadLink_queue.poll();
+				String loop_Node_ID=loop_RoadLink.direction==2?loop_RoadLink.SnodeID:loop_RoadLink.EnodeID;
+				String next_loop_Node_ID=loop_RoadLink.direction==2?loop_RoadLink.EnodeID:loop_RoadLink.SnodeID;
+				
+			}
 			file_mid.close();
 			file_mif.close();
 			file_station.close();

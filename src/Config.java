@@ -9,4 +9,5 @@ public class Config {
 	public static int HIGHWAY_COUNT=14000;    //从之前的数据了解到，高速公路路链总共是14000条左右
 	public static double EARTH_RADIUS=6371393;    //地球半径 米
 	public static double TOLERANCE=20; //米。预设的误差值，用于计算收费站、测速仪经纬度与路链、路段经纬度序列之间的距离，小于此值说明在一个路上
+	public static String START_ROADLINK_ID="16777580";  //预设的起始路链号
 }
