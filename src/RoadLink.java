@@ -1,13 +1,12 @@
 import java.util.List;
 
-import com.sun.org.apache.bcel.internal.generic.ReturnInstruction;
-
 public class RoadLink {
 	int speed_upbound,speed_lowbound,lane,direction,line;
-	double length,stake_mark;
+	double length,stake_start=0,stake_end=0,stake_direction=0
+			,station_stake=0,tachometer_stake=0;
 	boolean isRamp;
 	char road_attribute;
-	String ID,highway_ID,SnodeID,EnodeID;
+	String ID,highway_ID=null,SnodeID,EnodeID,station=null,tachometer=null;
 	List<LonLat> lonlat_list;
 	List<String> next_ID;
 	RoadLink(String line){
@@ -155,6 +154,8 @@ public class RoadLink {
 		return speed;
 	}
 	@Override
+	//输出格式为
+	//ID,下一ID，长度，车道数，最低限速，最高限速，mid文件中行号，测速仪，测速仪桩号，收费站，收费站桩号，桩号开始，桩号结束，桩号方向。
 	public String toString() {
 		StringBuilder return_str=new StringBuilder(ID);
 		StringBuilder next_ID_list=new StringBuilder("");
@@ -164,7 +165,13 @@ public class RoadLink {
 		}
 		return_str.append(",").append(next_ID_list.toString()).append(",")
 		.append(String.valueOf(length)).append(",").append(String.valueOf(lane))
-		.append(",").append()
+		.append(",").append(String.valueOf(speed_lowbound)).append(",")
+		.append(String.valueOf(speed_upbound)).append(",").append(String.valueOf(line))
+		.append(",").append(String.valueOf(tachometer)).append(",")
+		.append(String.valueOf(tachometer_stake)).append(",").append(String.valueOf(station))
+		.append(",").append(String.valueOf(station_stake)).append(",")
+		.append(String.valueOf(stake_start)).append(",").append(String.valueOf(stake_end))
+		.append(",").append(String.valueOf(stake_direction));
 		return return_str.toString();
 	}
 	
