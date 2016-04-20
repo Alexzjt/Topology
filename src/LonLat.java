@@ -33,6 +33,8 @@ public class LonLat {
 	}
 	@Override
 	public String toString() {
-		return String.valueOf(longitude)+","+String.valueOf(latitude);
+		StringBuilder return_str=new StringBuilder(String.valueOf(longitude));
+		return_str.append(",").append(String.valueOf(latitude));
+		return return_str.toString();
 	}
 }

@@ -1,10 +1,10 @@
 import java.util.List;
 
 public class RoadSegment {
-	String id;
-	List<String> next_ID;
-	double length;
-	LonLat lonLat_start;
+	public String id;
+	public List<String> next_ID;
+	public double length;
+	public LonLat lonLat_start;
 	public RoadSegment(String roadSegmentID) {
 		id=roadSegmentID;
 	}

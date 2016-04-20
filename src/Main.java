@@ -8,6 +8,8 @@ public class Main {
 			Scanner in = new Scanner(System.in);
 			BufferedReader file_mid = new BufferedReader(new FileReader(Config.MAP_MID));
 			BufferedReader file_mif = new BufferedReader(new FileReader(Config.MAP_MIF));
+			BufferedReader file_station = new BufferedReader(new FileReader(Config.STATION));
+			BufferedReader file_tachometer = new BufferedReader(new FileReader(Config.TACHYMETER));
 			int line=0,mif_kuai=0;
 			List<String> lonLat_array=new ArrayList<String>();
 			List<Integer> highway_lines=new ArrayList<Integer>(Config.HIGHWAY_COUNT);
@@ -16,8 +18,20 @@ public class Main {
 			HashMap<Integer,RoadLink> line_RoadLink=new HashMap<Integer,RoadLink>();
 			HashMap<String,List<String>> s2E_hash=new HashMap<String,List<String>>();
 			HashMap<String,List<String>> e2S_hash=new HashMap<String,List<String>>();
+			HashMap<String,Station> id_Station=new HashMap<String,Station>();
+			HashMap<String,Tachometer> id_Tachometer=new HashMap<String,Tachometer>();
 			String s;
-			while((s=file_mid.readLine())!=null){
+			while((s=file_station.readLine())!=null){//读收费站基础信息文件
+				String[] s_array=s.split(",");
+				Station temp_station=new Station(s_array[2],s_array[23],s_array[0],s_array[1],s_array[5]);
+				id_Station.put(temp_station.id,temp_station);
+			}
+			while((s=file_tachometer.readLine())!=null){//读测速仪基础信息文件
+				String[] s_array=s.split(" ");
+				Tachometer temp_Tachometer=new Tachometer(s_array[11],s_array[0],s_array[8],s_array[9]);
+				id_Tachometer.put(temp_Tachometer.id,temp_Tachometer);
+			}
+			while((s=file_mid.readLine())!=null){//读MID文件
 				line++;
 				String[] s_array=s.split("\",\"|\"");
 				//判断这一行是高速公路，即前两个字段是00
@@ -70,14 +84,14 @@ public class Main {
 					}
 				}
 			}
-			while((s=file_mif.readLine())!=null){
+			while((s=file_mif.readLine())!=null){//mif文件
 				if(s.contains("Line")||s.contains("Pline")){         
 					mif_kuai++;
 					lonLat_array.clear();
 					lonLat_array.add(s);
 				}
 				else if(s.contains("Pen")){
-					if(highway_lines.contains(mif_kuai)){
+					if(highway_lines.contains(mif_kuai)){//读到了高速公路的经纬度序列
 						List<LonLat> lonLat_list=new ArrayList<LonLat>();
 						int count=0;
 						String lon=null,lat=null;
@@ -96,7 +110,38 @@ public class Main {
 								}
 							}
 						}
+						//此处完成对经纬度序列的读取，接下来将其加入路链序列中。
+						Station station_on_RoadLink=null;
+						Tachometer tachometer_on_RoadLink=null;
+						for(LonLat loop_LonLat : lonLat_list){
+							//测试有没有收费站落在这个经纬度序列上
+							for(Iterator<Station> iterator=id_Station.values().iterator();iterator.hasNext();){
+								Station loop_station=iterator.next();
+								if(LonLat.GetDistance(loop_LonLat,loop_station.lonLat)<=Config.EARTH_RADIUS){
+									station_on_RoadLink=loop_station;
+									break;
+								}
+							}
+							//测试有没有测速仪落在这个经纬度序列上
+							for(Iterator<Tachometer> iterator=id_Tachometer.values().iterator();iterator.hasNext();){
+								Tachometer loop_Tachometer=iterator.next();
+								if(LonLat.GetDistance(loop_LonLat,loop_Tachometer.lonLat)<=Config.EARTH_RADIUS){
+									tachometer_on_RoadLink=loop_Tachometer;
+									break;
+								}
+							}
+						}
 						RoadLink temp_RoadLink=line_RoadLink.get(mif_kuai);
+						if(station_on_RoadLink!=null){
+							temp_RoadLink.station=station_on_RoadLink.id;
+							temp_RoadLink.highway_ID=station_on_RoadLink.highway_ID;
+							temp_RoadLink.station_stake=station_on_RoadLink.stake;
+						}
+						if(tachometer_on_RoadLink!=null){
+							temp_RoadLink.tachometer=tachometer_on_RoadLink.id;
+							temp_RoadLink.highway_ID=tachometer_on_RoadLink.highway_ID;
+							temp_RoadLink.tachometer_stake=tachometer_on_RoadLink.stake;
+						}
 						temp_RoadLink.lonlat_list=lonLat_list;
 						line_RoadLink.put(mif_kuai,temp_RoadLink);
 						id_RoadLink.put(temp_RoadLink.ID,temp_RoadLink);
@@ -140,6 +185,8 @@ public class Main {
 			
 			file_mid.close();
 			file_mif.close();
+			file_station.close();
+			file_tachometer.close();
 		}
 		catch(Exception e){
 			e.printStackTrace();

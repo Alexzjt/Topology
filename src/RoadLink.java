@@ -1,14 +1,14 @@
 import java.util.List;
 
 public class RoadLink {
-	int speed_upbound,speed_lowbound,lane,direction,line;
-	double length,stake_start=0,stake_end=0,stake_direction=0
+	public int speed_upbound,speed_lowbound,lane,direction,line;
+	public double length,stake_start=0,stake_end=0,stake_direction=0
 			,station_stake=0,tachometer_stake=0;
-	boolean isRamp;
-	char road_attribute;
-	String ID,highway_ID=null,SnodeID,EnodeID,station=null,tachometer=null;
-	List<LonLat> lonlat_list;
-	List<String> next_ID;
+	public boolean isRamp;
+	public char road_attribute;
+	public String ID,highway_ID=null,SnodeID,EnodeID,station=null,tachometer=null;
+	public List<LonLat> lonlat_list;
+	public List<String> next_ID;
 	RoadLink(String line){
 		String[] line_array=line.split("\",\"|\"");
 		int[] speed=RoadLink.speed_judge(Integer.valueOf(line_array[5]));
@@ -155,7 +155,7 @@ public class RoadLink {
 	}
 	@Override
 	//输出格式为
-	//ID,下一ID，长度，车道数，最低限速，最高限速，mid文件中行号，测速仪，测速仪桩号，收费站，收费站桩号，桩号开始，桩号结束，桩号方向。
+	//ID,下一ID，长度，起点经度、起点纬度、车道数，最低限速，最高限速，mid文件中行号，测速仪，测速仪桩号，收费站，收费站桩号，桩号开始，桩号结束，桩号方向。
 	public String toString() {
 		StringBuilder return_str=new StringBuilder(ID);
 		StringBuilder next_ID_list=new StringBuilder("");
@@ -164,7 +164,8 @@ public class RoadLink {
 			next_ID_list.append(next_ID.get(i)).append("#");
 		}
 		return_str.append(",").append(next_ID_list.toString()).append(",")
-		.append(String.valueOf(length)).append(",").append(String.valueOf(lane))
+		.append(String.valueOf(length)).append(",").append(lonlat_list.get(0).toString())
+		.append(",").append(String.valueOf(lane))
 		.append(",").append(String.valueOf(speed_lowbound)).append(",")
 		.append(String.valueOf(speed_upbound)).append(",").append(String.valueOf(line))
 		.append(",").append(String.valueOf(tachometer)).append(",")
