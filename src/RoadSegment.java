@@ -12,9 +12,12 @@ public class RoadSegment {
 	public String toString() {
 		StringBuilder next_ID_str=new StringBuilder("");
 		StringBuilder return_str=new StringBuilder("");
-		for(String str : next_ID)
-			next_ID_str.append(str);
-		return_str.append(id).append(next_ID_str.toString()).append(String.valueOf(length))
+		for(int i=0;i<next_ID.size()-1;i++){
+			next_ID_str.append(next_ID.get(i)).append("#");
+		}
+		next_ID_str.append(next_ID.get(next_ID.size()-1));
+		return_str.append(id).append(",").append(next_ID_str.toString()).append(",")
+		.append(String.valueOf(length)).append(",")
 			.append(lonLat_start.toString());
 		return return_str.toString();
 	}

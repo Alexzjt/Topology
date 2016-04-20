@@ -1,5 +1,7 @@
 import java.util.List;
 
+import com.sun.org.apache.bcel.internal.generic.ReturnInstruction;
+
 public class RoadLink {
 	int speed_upbound,speed_lowbound,lane,direction,line;
 	double length,stake_mark;
@@ -7,6 +9,7 @@ public class RoadLink {
 	char road_attribute;
 	String ID,highway_ID,SnodeID,EnodeID;
 	List<LonLat> lonlat_list;
+	List<String> next_ID;
 	RoadLink(String line){
 		String[] line_array=line.split("\",\"|\"");
 		int[] speed=RoadLink.speed_judge(Integer.valueOf(line_array[5]));
@@ -151,4 +154,18 @@ public class RoadLink {
 		}
 		return speed;
 	}
+	@Override
+	public String toString() {
+		StringBuilder return_str=new StringBuilder(ID);
+		StringBuilder next_ID_list=new StringBuilder("");
+		int length=next_ID.size();
+		for(int i=0;i<length-1;i++){
+			next_ID_list.append(next_ID.get(i)).append("#");
+		}
+		return_str.append(",").append(next_ID_list.toString()).append(",")
+		.append(String.valueOf(length)).append(",").append(String.valueOf(lane))
+		.append(",").append()
+		return return_str.toString();
+	}
+	
 }

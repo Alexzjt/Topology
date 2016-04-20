@@ -24,6 +24,7 @@ public class Main {
 				if(s_array[4].charAt(0)=='0'&&s_array[4].charAt(1)=='0'){
 					highway_lines.add(line);
 					RoadLink temp_RoadLink=new RoadLink(s_array);
+					temp_RoadLink.line=line;
 					id_RoadLink.put(s_array[2],temp_RoadLink);
 					//此处需要判断道路的方向，2是从SNode到ENode，3是从ENode到SNode。一般情况下就这两种选择。
 					String nodeID,end_nodeID;
@@ -106,8 +107,11 @@ public class Main {
 				}
 			}
 			//
-			System.out.println("请输入首个路链的ID");
+			/*System.out.println("请输入首个路链的ID");
 			String input_RoadLink_ID=in.next();
+			System.out.println("请输入高速公路编号，如G42");
+			String highway_number=in.next();
+			char highway_type='G';
 			RoadLink loop_RoadLink=id_RoadLink.get(input_RoadLink_ID);
 			String loop_Node_ID=loop_RoadLink.direction==2?loop_RoadLink.SnodeID:loop_RoadLink.EnodeID;
 			double loop_length=0;
@@ -116,8 +120,23 @@ public class Main {
 			HashMap<String,List<String>> id_nextID_List=new HashMap<String,List<String>>();
 			
 			while(loop_Node_ID!=null){
-				
+				List<String> temp_ID_list=seNodeID_IDArray.get(loop_Node_ID);
+				if(temp_ID_list.size()==1){
+					loop_RoadLink=id_RoadLink.get(temp_ID_list.get(0));
+					if(highway_type==loop_RoadLink.road_attribute){
+						loop_length+=loop_RoadLink.length;
+						loop_lonLat_list.addAll(loop_RoadLink.lonlat_list);
+					}
+					else{
+						
+					}
+				}
+				else{
+					
+				}
 			}
+			*/
+			
 			
 			file_mid.close();
 			file_mif.close();
