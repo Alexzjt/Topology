@@ -121,7 +121,7 @@ public class Main {
 							//测试有没有收费站落在这个经纬度序列上
 							for(Iterator<Station> iterator=id_Station.values().iterator();iterator.hasNext();){
 								Station loop_station=iterator.next();
-								if(LonLat.GetDistance(loop_LonLat,loop_station.lonLat)<=Config.EARTH_RADIUS){
+								if(LonLat.GetDistance(loop_LonLat,loop_station.lonLat)<=Config.TOLERANCE){
 									station_on_RoadLink=loop_station;
 									break;
 								}
@@ -129,7 +129,7 @@ public class Main {
 							//测试有没有测速仪落在这个经纬度序列上
 							for(Iterator<Tachometer> iterator=id_Tachometer.values().iterator();iterator.hasNext();){
 								Tachometer loop_Tachometer=iterator.next();
-								if(LonLat.GetDistance(loop_LonLat,loop_Tachometer.lonLat)<=Config.EARTH_RADIUS){
+								if(LonLat.GetDistance(loop_LonLat,loop_Tachometer.lonLat)<=Config.TOLERANCE){
 									tachometer_on_RoadLink=loop_Tachometer;
 									break;
 								}
