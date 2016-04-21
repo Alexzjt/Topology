@@ -4,49 +4,63 @@ public class RoadLink {
 	public int speed_upbound,speed_lowbound,lane,direction,line;
 	public double length,stake_start=0,stake_end=0,stake_direction=0
 			,station_stake=0,tachometer_stake=0;
-	public boolean isRamp;
+	public boolean isRamp,visit=false;
 	public char road_attribute;
 	public String ID,highway_ID=null,SnodeID,EnodeID,station=null,tachometer=null;
 	public List<LonLat> lonlat_list;
 	public List<String> next_ID;
 	RoadLink(String line){
 		String[] line_array=line.split("\",\"|\"");
-		int[] speed=RoadLink.speed_judge(Integer.valueOf(line_array[5]));
+		int[] speed=RoadLink.speed_judge(Integer.valueOf(line_array[25]));
 		speed_lowbound=speed[0];
 		speed_upbound=speed[1];
+		direction=Integer.valueOf(line_array[6]);
 		lane=RoadLink.lane_num(line_array[26],line_array[27]);
 		length=Double.valueOf(line_array[13]);
 		ID=line_array[2];
-		SnodeID=line_array[10];
-		EnodeID=line_array[11];
+		SnodeID=line_array[RoadLink.judge_SNode(direction)];
+		EnodeID=line_array[RoadLink.judge_ENode(direction)];
 		isRamp=RoadLink.judge_Ramp(line_array[4]);
 		road_attribute=RoadLink.judge_Road_attribute(line_array[4]);
 	}
 	RoadLink(String[] line_array){
-		int[] speed=RoadLink.speed_judge(Integer.valueOf(line_array[5]));
+		int[] speed=RoadLink.speed_judge(Integer.valueOf(line_array[25]));
 		speed_lowbound=speed[0];
 		speed_upbound=speed[1];
 		lane=RoadLink.lane_num(line_array[26],line_array[27]);
 		length=Double.valueOf(line_array[13]);
+		direction=Integer.valueOf(line_array[6]);
 		ID=line_array[2];
-		SnodeID=line_array[10];
-		EnodeID=line_array[11];
+		SnodeID=line_array[RoadLink.judge_SNode(direction)];
+		EnodeID=line_array[RoadLink.judge_ENode(direction)];
 		isRamp=RoadLink.judge_Ramp(line_array[4]);
 		road_attribute=RoadLink.judge_Road_attribute(line_array[4]);
 	}
+	public static int judge_SNode(int direction){  
+		if(direction==2)   //顺行
+			return 10;
+		else	//逆行
+			return 11;
+	}
+	public static int judge_ENode(int direction){
+		if(direction==2)
+			return 11;
+		else
+			return 10;
+	}
 	public static boolean judge_Ramp(String kind){
 		String[] kind_array=kind.split("");
-		if(kind_array[3].equals("4")||kind_array[3].equals("5")||
-			kind_array[3].equals("3")||kind_array[3].equals("7")||
-			kind_array[3].equals("6")||kind_array[3].equals("a")||
-			kind_array[3].equals("0")){
+		if(kind_array[4].equals("4")||kind_array[4].equals("5")||
+			kind_array[4].equals("3")||kind_array[4].equals("7")||
+			kind_array[4].equals("6")||kind_array[4].equals("a")||
+			kind_array[4].equals("0")){
 			return true;
 		}
 		if(kind.length()>5){
-			if(kind_array[8].equals("4")||kind_array[8].equals("5")||
-			kind_array[8].equals("3")||kind_array[8].equals("7")||
-			kind_array[8].equals("6")||kind_array[8].equals("a")||
-			kind_array[8].equals("0")){
+			if(kind_array[9].equals("4")||kind_array[9].equals("5")||
+			kind_array[9].equals("3")||kind_array[9].equals("7")||
+			kind_array[9].equals("6")||kind_array[9].equals("a")||
+			kind_array[9].equals("0")){
 				return true;
 			}
 		}
@@ -63,13 +77,13 @@ public class RoadLink {
 	public static char judge_Road_attribute(String kind){
 		String[] kind_array=kind.split("");
 		if(kind.length()<5){
-			return RoadLink.judge_Road_char(kind_array[3]);
+			return RoadLink.judge_Road_char(kind_array[4]);
 		}
 		else if(kind.length()>=5&&kind.length()<10){
-			return RoadLink.judge_Road_char(kind_array[3],kind_array[8]);
+			return RoadLink.judge_Road_char(kind_array[4],kind_array[9]);
 		}
 		else if(kind.length()>=10&&kind.length()<15){
-			return RoadLink.judge_Road_char(kind_array[3],kind_array[8],kind_array[14]);
+			return RoadLink.judge_Road_char(kind_array[4],kind_array[9],kind_array[14]);
 		}
 		return 'G';
 	}
@@ -155,16 +169,20 @@ public class RoadLink {
 	}
 	@Override
 	//输出格式为
-	//ID,下一ID，长度，起点经度、起点纬度、车道数，最低限速，最高限速，mid文件中行号，测速仪，测速仪桩号，收费站，收费站桩号，桩号开始，桩号结束，桩号方向。
+	//ID,下一ID，长度，是否匝道，道路类型，起点经度、起点纬度、车道数，最低限速，最高限速，mid文件中行号，测速仪，测速仪桩号，收费站，收费站桩号，桩号开始，桩号结束，桩号方向。
 	public String toString() {
 		StringBuilder return_str=new StringBuilder(ID);
 		StringBuilder next_ID_list=new StringBuilder("");
-		int length=next_ID.size();
-		for(int i=0;i<length-1;i++){
-			next_ID_list.append(next_ID.get(i)).append("#");
+		if(next_ID!=null){
+			int length=next_ID.size();
+			for(int i=0;i<length-1;i++){
+				next_ID_list.append(next_ID.get(i)).append("#");
+			}
+			next_ID_list.append(next_ID.get(length-1));
 		}
 		return_str.append(",").append(next_ID_list.toString()).append(",")
-		.append(String.valueOf(length)).append(",").append(lonlat_list.get(0).toString())
+		.append(String.valueOf(length)).append(",").append(String.valueOf(isRamp)).append(",")
+		.append(String.valueOf(road_attribute)).append(",").append(lonlat_list.get(0).toString())
 		.append(",").append(String.valueOf(lane))
 		.append(",").append(String.valueOf(speed_lowbound)).append(",")
 		.append(String.valueOf(speed_upbound)).append(",").append(String.valueOf(line))

@@ -1,6 +1,8 @@
 import java.io.*;
 import java.util.*;
 
+import com.sun.jndi.ldap.LdapPoolManager;
+
 public class Main {
 	public static void main(String[] args){
 		//暂时先写在这里吧，目前没仔细想如何函数化代码
@@ -27,7 +29,9 @@ public class Main {
 				id_Station.put(temp_station.id,temp_station);
 			}
 			while((s=file_tachometer.readLine())!=null){//读测速仪基础信息文件
-				String[] s_array=s.split(" ");
+				String[] s_array=s.split("	");
+				if(s_array[8].equals("null")||s_array[9].equals("null"))
+					continue;
 				Tachometer temp_Tachometer=new Tachometer(s_array[11],s_array[0],s_array[8],s_array[9]);
 				id_Tachometer.put(temp_Tachometer.id,temp_Tachometer);
 			}
@@ -41,7 +45,7 @@ public class Main {
 					temp_RoadLink.line=line;
 					id_RoadLink.put(s_array[2],temp_RoadLink);
 					//此处需要判断道路的方向，2是从SNode到ENode，3是从ENode到SNode。一般情况下就这两种选择。
-					String nodeID,end_nodeID;
+					/*String nodeID,end_nodeID;
 					if(s_array[6].equals("2")){//顺行
 						nodeID=s_array[10];
 						end_nodeID=s_array[11];
@@ -49,38 +53,38 @@ public class Main {
 					else{//逆行
 						nodeID=s_array[11];
 						end_nodeID=s_array[10];
-					}
-					if(seNodeID_IDArray.containsKey(nodeID)){
-						List<String> temp_array=seNodeID_IDArray.get(nodeID);
+					}*/
+					if(seNodeID_IDArray.containsKey(temp_RoadLink.SnodeID)){
+						List<String> temp_array=seNodeID_IDArray.get(temp_RoadLink.SnodeID);
 						temp_array.add(s_array[2]);
-						seNodeID_IDArray.put(nodeID,temp_array);
+						seNodeID_IDArray.put(temp_RoadLink.SnodeID,temp_array);
 					}
 					else{
 						//此处认为某个Node对应的路链最多2个，即一条路最多分2条路。
 						List<String> temp_array=new ArrayList<String>(2);
 						temp_array.add(s_array[2]);
-						seNodeID_IDArray.put(nodeID,temp_array);
+						seNodeID_IDArray.put(temp_RoadLink.SnodeID,temp_array);
 					}
 					line_RoadLink.put(line,temp_RoadLink);
-					if(s2E_hash.containsKey(nodeID)){
-						List<String> temp_array=s2E_hash.get(nodeID);
-						temp_array.add(end_nodeID);
-						s2E_hash.put(nodeID,temp_array);
+					if(s2E_hash.containsKey(temp_RoadLink.SnodeID)){
+						List<String> temp_array=s2E_hash.get(temp_RoadLink.SnodeID);
+						temp_array.add(temp_RoadLink.EnodeID);
+						s2E_hash.put(temp_RoadLink.SnodeID,temp_array);
 					}
 					else {
 						List<String> temp_array=new ArrayList<String>(2);
-						temp_array.add(end_nodeID);
-						s2E_hash.put(nodeID,temp_array);
+						temp_array.add(temp_RoadLink.EnodeID);
+						s2E_hash.put(temp_RoadLink.SnodeID,temp_array);
 					}
-					if(e2S_hash.containsKey(end_nodeID)){
-						List<String> temp_array=e2S_hash.get(end_nodeID);
-						temp_array.add(nodeID);
-						e2S_hash.put(end_nodeID,temp_array);
+					if(e2S_hash.containsKey(temp_RoadLink.EnodeID)){
+						List<String> temp_array=e2S_hash.get(temp_RoadLink.EnodeID);
+						temp_array.add(temp_RoadLink.SnodeID);
+						e2S_hash.put(temp_RoadLink.EnodeID,temp_array);
 					}
 					else {
 						List<String> temp_array=new ArrayList<String>(2);
-						temp_array.add(nodeID);
-						e2S_hash.put(end_nodeID,temp_array);
+						temp_array.add(temp_RoadLink.SnodeID);
+						e2S_hash.put(temp_RoadLink.EnodeID,temp_array);
 					}
 				}
 			}
@@ -183,14 +187,27 @@ public class Main {
 			*/
 			
 			//从这里起，为每个路链配置next属性。采用惯用手法BFS。
+			BufferedWriter file_roadLink=new BufferedWriter(new FileWriter(Config.ROADLINK_OUTPUT));
 			ArrayDeque<RoadLink> roadLink_queue=new ArrayDeque<RoadLink>();
 			roadLink_queue.add(id_RoadLink.get(Config.START_ROADLINK_ID));
 			while(roadLink_queue.size()!=0){
 				RoadLink loop_RoadLink=roadLink_queue.poll();
-				String loop_Node_ID=loop_RoadLink.direction==2?loop_RoadLink.SnodeID:loop_RoadLink.EnodeID;
-				String next_loop_Node_ID=loop_RoadLink.direction==2?loop_RoadLink.EnodeID:loop_RoadLink.SnodeID;
-				
+				if(!loop_RoadLink.visit){
+					System.out.println(loop_RoadLink.ID+","+loop_RoadLink.EnodeID);
+					loop_RoadLink.visit=true;
+					loop_RoadLink.next_ID=seNodeID_IDArray.get(loop_RoadLink.EnodeID);
+					file_roadLink.write(loop_RoadLink.toString()+"\r\n");
+					id_RoadLink.put(loop_RoadLink.ID,loop_RoadLink);
+					if(loop_RoadLink.next_ID!=null){
+						for(String str_id : loop_RoadLink.next_ID){
+							RoadLink temp_RoadLink_judge=id_RoadLink.get(str_id);
+							if(temp_RoadLink_judge!=null)
+								roadLink_queue.add(temp_RoadLink_judge);
+						}
+					}
+				}
 			}
+			file_roadLink.close();
 			file_mid.close();
 			file_mif.close();
 			file_station.close();
@@ -198,6 +215,7 @@ public class Main {
 		}
 		catch(Exception e){
 			e.printStackTrace();
+			
 		}
 		finally{
 			

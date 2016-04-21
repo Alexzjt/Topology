@@ -3,8 +3,14 @@ import sun.security.action.GetBooleanAction;
 public class LonLat {
 	public double longitude,latitude;
 	LonLat(String str1,String str2){
-		longitude=Double.valueOf(str1);
-		latitude=Double.valueOf(str2);
+		if(str1.equals("null"))
+			longitude=0;
+		else
+			longitude=Double.valueOf(str1);
+		if(str2.equals("null"))
+			latitude=0;
+		else
+			latitude=Double.valueOf(str2);
 	}
 	LonLat(String str){
 		String[] array=str.split(" ");
