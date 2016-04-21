@@ -196,6 +196,16 @@ public class Main {
 					System.out.println(loop_RoadLink.ID+","+loop_RoadLink.EnodeID);
 					loop_RoadLink.visit=true;
 					loop_RoadLink.next_ID=seNodeID_IDArray.get(loop_RoadLink.EnodeID);
+					if(loop_RoadLink.next_ID==null){//按诸老师说的说法新增了容错判断
+						String change_EnodeID="";
+						if(loop_RoadLink.EnodeID.charAt(0)=='2'){
+							change_EnodeID="1"+loop_RoadLink.EnodeID.substring(1,loop_RoadLink.EnodeID.length());
+						}
+						else if(loop_RoadLink.EnodeID.charAt(0)=='1'){
+							change_EnodeID="2"+loop_RoadLink.EnodeID.substring(1,loop_RoadLink.EnodeID.length());
+						}
+						loop_RoadLink.next_ID=seNodeID_IDArray.get(change_EnodeID);
+					}
 					file_roadLink.write(loop_RoadLink.toString()+"\r\n");
 					id_RoadLink.put(loop_RoadLink.ID,loop_RoadLink);
 					if(loop_RoadLink.next_ID!=null){
