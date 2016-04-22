@@ -12,6 +12,7 @@ public class Main {
 			BufferedReader file_mif = new BufferedReader(new FileReader(Config.MAP_MIF));
 			BufferedReader file_station = new BufferedReader(new FileReader(Config.STATION));
 			BufferedReader file_tachometer = new BufferedReader(new FileReader(Config.TACHYMETER));
+			BufferedReader file_old_topology = new BufferedReader(new FileReader(Config.OLD_TOPOLOGY));
 			int line=0,mif_kuai=0;
 			List<String> lonLat_array=new ArrayList<String>();
 			List<Integer> highway_lines=new ArrayList<Integer>(Config.HIGHWAY_COUNT);
@@ -22,6 +23,7 @@ public class Main {
 			HashMap<String,List<String>> e2S_hash=new HashMap<String,List<String>>();
 			HashMap<String,Station> id_Station=new HashMap<String,Station>();
 			HashMap<String,Tachometer> id_Tachometer=new HashMap<String,Tachometer>();
+			HashMap<String,String> id_Tachometer_stake=new HashMap<String,String>();
 			String s;
 			while((s=file_station.readLine())!=null){//读收费站基础信息文件
 				String[] s_array=s.split(",");
@@ -34,6 +36,12 @@ public class Main {
 					continue;
 				Tachometer temp_Tachometer=new Tachometer(s_array[11],s_array[0],s_array[8],s_array[9]);
 				id_Tachometer.put(temp_Tachometer.id,temp_Tachometer);
+			}
+			while((s=file_old_topology.readLine())!=null){
+				String[] s_array=s.split(",");
+				if(!s_array[8].equals("null")){
+					id_Tachometer_stake.put(s_array[8],s_array[9]);
+				}
 			}
 			while((s=file_mid.readLine())!=null){//读MID文件
 				line++;
@@ -115,6 +123,7 @@ public class Main {
 							}
 						}
 						//此处完成对经纬度序列的读取，接下来将其加入路链序列中。
+						RoadLink temp_RoadLink=line_RoadLink.get(mif_kuai);
 						Station station_on_RoadLink=null;
 						Tachometer tachometer_on_RoadLink=null;
 						for(LonLat loop_LonLat : lonLat_list){
@@ -129,13 +138,12 @@ public class Main {
 							//测试有没有测速仪落在这个经纬度序列上
 							for(Iterator<Tachometer> iterator=id_Tachometer.values().iterator();iterator.hasNext();){
 								Tachometer loop_Tachometer=iterator.next();
-								if(LonLat.GetDistance(loop_LonLat,loop_Tachometer.lonLat)<=Config.TOLERANCE){
+								if(LonLat.GetDistance(loop_LonLat,loop_Tachometer.lonLat)<=Config.TOLERANCE&&!temp_RoadLink.isRamp){
 									tachometer_on_RoadLink=loop_Tachometer;
 									break;
 								}
 							}
 						}
-						RoadLink temp_RoadLink=line_RoadLink.get(mif_kuai);
 						if(station_on_RoadLink!=null){
 							temp_RoadLink.station=station_on_RoadLink.id;
 							temp_RoadLink.highway_ID=station_on_RoadLink.highway_ID;
@@ -144,7 +152,9 @@ public class Main {
 						if(tachometer_on_RoadLink!=null){
 							temp_RoadLink.tachometer=tachometer_on_RoadLink.id;
 							temp_RoadLink.highway_ID=tachometer_on_RoadLink.highway_ID;
-							temp_RoadLink.tachometer_stake=tachometer_on_RoadLink.stake;
+							//System.out.println(id_Tachometer_stake.get(tachometer_on_RoadLink.id));
+							String tachometer_stake=id_Tachometer_stake.get(tachometer_on_RoadLink.id);
+							temp_RoadLink.tachometer_stake=tachometer_stake==null?tachometer_on_RoadLink.stake:Double.valueOf(tachometer_stake);
 						}
 						temp_RoadLink.lonlat_list=lonLat_list;
 						line_RoadLink.put(mif_kuai,temp_RoadLink);
@@ -188,13 +198,13 @@ public class Main {
 			
 			//从这里起，为每个路链配置next属性。采用惯用手法BFS。
 			BufferedWriter file_roadLink=new BufferedWriter(new FileWriter(Config.ROADLINK_OUTPUT));
-			file_roadLink.write("路链ID,下一路链ID,长度,是否匝道,路链属性,经度,纬度,车道数,速度下限,速度上限,MID中行号,测速仪,测速仪桩号,收费站,收费站桩号,起点桩号,终点桩号,方向\r\n");
+			file_roadLink.write("路链ID,下一路链ID,长度,是否匝道,路链属性,高速编号,经度,纬度,车道数,速度下限,速度上限,MID中行号,测速仪,测速仪桩号,收费站,收费站桩号,起点桩号,终点桩号,方向\r\n");
 			ArrayDeque<RoadLink> roadLink_queue=new ArrayDeque<RoadLink>();
 			roadLink_queue.add(id_RoadLink.get(Config.START_ROADLINK_ID));
 			while(roadLink_queue.size()!=0){
 				RoadLink loop_RoadLink=roadLink_queue.poll();
 				if(!loop_RoadLink.visit){
-					System.out.println(loop_RoadLink.ID+","+loop_RoadLink.EnodeID);
+					//System.out.println(loop_RoadLink.ID+","+loop_RoadLink.EnodeID);
 					loop_RoadLink.visit=true;
 					loop_RoadLink.next_ID=seNodeID_IDArray.get(loop_RoadLink.EnodeID);
 					if(loop_RoadLink.next_ID==null){//按诸老师说的说法新增了容错判断
@@ -223,6 +233,7 @@ public class Main {
 			file_mif.close();
 			file_station.close();
 			file_tachometer.close();
+			file_old_topology.close();
 		}
 		catch(Exception e){
 			e.printStackTrace();
