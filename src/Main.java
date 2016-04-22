@@ -188,7 +188,7 @@ public class Main {
 			
 			//从这里起，为每个路链配置next属性。采用惯用手法BFS。
 			BufferedWriter file_roadLink=new BufferedWriter(new FileWriter(Config.ROADLINK_OUTPUT));
-			file_roadLink.write("路链ID,下一路链ID,长度,是否匝道,路链属性,经度,纬度,车道数,速度下限,速度上限,MID中行号,测速仪,测速仪桩号,收费站,收费站桩号,起点桩号,终点桩号,方向");
+			file_roadLink.write("路链ID,下一路链ID,长度,是否匝道,路链属性,经度,纬度,车道数,速度下限,速度上限,MID中行号,测速仪,测速仪桩号,收费站,收费站桩号,起点桩号,终点桩号,方向\r\n");
 			ArrayDeque<RoadLink> roadLink_queue=new ArrayDeque<RoadLink>();
 			roadLink_queue.add(id_RoadLink.get(Config.START_ROADLINK_ID));
 			while(roadLink_queue.size()!=0){

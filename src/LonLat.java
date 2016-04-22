@@ -12,6 +12,10 @@ public class LonLat {
 		else
 			latitude=Double.valueOf(str2);
 	}
+	LonLat(double num1,double num2){
+		longitude=num1;
+		latitude=num2;
+	}
 	LonLat(String str){
 		String[] array=str.split(" ");
 		longitude=Double.valueOf(array[0]);
@@ -35,7 +39,7 @@ public class LonLat {
 	   return s;
 	}
 	public static double GetDistance(LonLat obj1,LonLat obj2){
-		return GetDistance(obj1.latitude,obj1.latitude,obj2.latitude,obj2.longitude);
+		return GetDistance(obj1.latitude,obj1.longitude,obj2.latitude,obj2.longitude);
 	}
 	@Override
 	public String toString() {
