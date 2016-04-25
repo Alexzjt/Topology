@@ -124,6 +124,7 @@ public class Main {
 						}
 						//此处完成对经纬度序列的读取，接下来将其加入路链序列中。
 						RoadLink temp_RoadLink=line_RoadLink.get(mif_kuai);
+						/*
 						Station station_on_RoadLink=null;
 						Tachometer tachometer_on_RoadLink=null;
 						for(LonLat loop_LonLat : lonLat_list){
@@ -156,6 +157,7 @@ public class Main {
 							String tachometer_stake=id_Tachometer_stake.get(tachometer_on_RoadLink.id);
 							temp_RoadLink.tachometer_stake=tachometer_stake==null?tachometer_on_RoadLink.stake:Double.valueOf(tachometer_stake);
 						}
+						*/
 						temp_RoadLink.lonlat_list=lonLat_list;
 						line_RoadLink.put(mif_kuai,temp_RoadLink);
 						id_RoadLink.put(temp_RoadLink.ID,temp_RoadLink);
