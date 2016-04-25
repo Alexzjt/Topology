@@ -169,7 +169,7 @@ public class RoadLink {
 	}
 	@Override
 	//输出格式为
-	//ID,下一ID，前一ID，长度，是否匝道，道路类型，所属高速编号，起点经度、起点纬度、车道数，最低限速，最高限速，mid文件中行号，测速仪，测速仪桩号，收费站，收费站桩号，桩号开始，桩号结束，桩号方向。
+	//ID,下一ID，上一ID，长度，是否匝道，道路类型，所属高速编号，起点经度、起点纬度、车道数，最低限速，最高限速，mid文件中行号，测速仪，测速仪桩号，收费站，收费站桩号，桩号开始，桩号结束，桩号方向。
 	public String toString() {
 		StringBuilder return_str=new StringBuilder(ID);
 		StringBuilder next_ID_list=new StringBuilder("");

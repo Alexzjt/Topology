@@ -17,10 +17,11 @@ public class Main {
 			List<String> lonLat_array=new ArrayList<String>();
 			List<Integer> highway_lines=new ArrayList<Integer>(Config.HIGHWAY_COUNT);
 			HashMap<String,RoadLink> id_RoadLink=new HashMap<String,RoadLink>();
-			HashMap<String,List<String>> seNodeID_IDArray=new HashMap<String,List<String>>();
+			HashMap<String,List<String>> sNodeID_IDArray=new HashMap<String,List<String>>();
+			HashMap<String,List<String>> eNodeID_IDArray=new HashMap<String,List<String>>();
 			HashMap<Integer,RoadLink> line_RoadLink=new HashMap<Integer,RoadLink>();
-			HashMap<String,List<String>> s2E_hash=new HashMap<String,List<String>>();
-			HashMap<String,List<String>> e2S_hash=new HashMap<String,List<String>>();
+			//HashMap<String,List<String>> s2E_hash=new HashMap<String,List<String>>();
+			//HashMap<String,List<String>> e2S_hash=new HashMap<String,List<String>>();
 			HashMap<String,Station> id_Station=new HashMap<String,Station>();
 			HashMap<String,Tachometer> id_Tachometer=new HashMap<String,Tachometer>();
 			HashMap<String,String> id_Tachometer_stake=new HashMap<String,String>();
@@ -37,7 +38,7 @@ public class Main {
 				Tachometer temp_Tachometer=new Tachometer(s_array[11],s_array[0],s_array[8],s_array[9]);
 				id_Tachometer.put(temp_Tachometer.id,temp_Tachometer);
 			}
-			while((s=file_old_topology.readLine())!=null){
+			while((s=file_old_topology.readLine())!=null){  //读旧拓扑文件 获取其中桩号。
 				String[] s_array=s.split(",");
 				if(!s_array[8].equals("null")){
 					id_Tachometer_stake.put(s_array[8],s_array[9]);
@@ -62,18 +63,30 @@ public class Main {
 						nodeID=s_array[11];
 						end_nodeID=s_array[10];
 					}*/
-					if(seNodeID_IDArray.containsKey(temp_RoadLink.SnodeID)){
-						List<String> temp_array=seNodeID_IDArray.get(temp_RoadLink.SnodeID);
+					if(sNodeID_IDArray.containsKey(temp_RoadLink.SnodeID)){
+						List<String> temp_array=sNodeID_IDArray.get(temp_RoadLink.SnodeID);
 						temp_array.add(s_array[2]);
-						seNodeID_IDArray.put(temp_RoadLink.SnodeID,temp_array);
+						sNodeID_IDArray.put(temp_RoadLink.SnodeID,temp_array);
 					}
 					else{
 						//此处认为某个Node对应的路链最多2个，即一条路最多分2条路。
 						List<String> temp_array=new ArrayList<String>(2);
 						temp_array.add(s_array[2]);
-						seNodeID_IDArray.put(temp_RoadLink.SnodeID,temp_array);
+						sNodeID_IDArray.put(temp_RoadLink.SnodeID,temp_array);
+					}
+					if(eNodeID_IDArray.containsKey(temp_RoadLink.EnodeID)){
+						List<String> temp_array=eNodeID_IDArray.get(temp_RoadLink.EnodeID);
+						temp_array.add(s_array[2]);
+						eNodeID_IDArray.put(temp_RoadLink.EnodeID,temp_array);
+					}
+					else{
+						//此处认为某个Node对应的路链最多2个，即一条路最多分2条路。
+						List<String> temp_array=new ArrayList<String>(2);
+						temp_array.add(s_array[2]);
+						eNodeID_IDArray.put(temp_RoadLink.EnodeID,temp_array);
 					}
 					line_RoadLink.put(line,temp_RoadLink);
+					/*
 					if(s2E_hash.containsKey(temp_RoadLink.SnodeID)){
 						List<String> temp_array=s2E_hash.get(temp_RoadLink.SnodeID);
 						temp_array.add(temp_RoadLink.EnodeID);
@@ -94,6 +107,7 @@ public class Main {
 						temp_array.add(temp_RoadLink.SnodeID);
 						e2S_hash.put(temp_RoadLink.EnodeID,temp_array);
 					}
+					*/
 				}
 			}
 			while((s=file_mif.readLine())!=null){//mif文件
@@ -200,7 +214,7 @@ public class Main {
 			
 			//从这里起，为每个路链配置next属性。采用惯用手法BFS。
 			BufferedWriter file_roadLink=new BufferedWriter(new FileWriter(Config.ROADLINK_OUTPUT));
-			file_roadLink.write("路链ID,下一路链ID,长度,是否匝道,路链属性,高速编号,经度,纬度,车道数,速度下限,速度上限,MID中行号,测速仪,测速仪桩号,收费站,收费站桩号,起点桩号,终点桩号,方向\r\n");
+			file_roadLink.write("路链ID,下一路链ID,上一路链ID,长度,是否匝道,路链属性,高速编号,经度,纬度,车道数,速度下限,速度上限,MID中行号,测速仪,测速仪桩号,收费站,收费站桩号,起点桩号,终点桩号,方向\r\n");
 			ArrayDeque<RoadLink> roadLink_queue=new ArrayDeque<RoadLink>();
 			roadLink_queue.add(id_RoadLink.get(Config.START_ROADLINK_ID));
 			while(roadLink_queue.size()!=0){
@@ -208,7 +222,8 @@ public class Main {
 				if(!loop_RoadLink.visit){
 					//System.out.println(loop_RoadLink.ID+","+loop_RoadLink.EnodeID);
 					loop_RoadLink.visit=true;
-					loop_RoadLink.next_ID=seNodeID_IDArray.get(loop_RoadLink.EnodeID);
+					loop_RoadLink.next_ID=sNodeID_IDArray.get(loop_RoadLink.EnodeID);
+					loop_RoadLink.pre_ID=eNodeID_IDArray.get(loop_RoadLink.SnodeID);
 					if(loop_RoadLink.next_ID==null){//按诸老师说的说法新增了容错判断
 						String change_EnodeID="";
 						if(loop_RoadLink.EnodeID.charAt(0)=='2'){
@@ -217,12 +232,29 @@ public class Main {
 						else if(loop_RoadLink.EnodeID.charAt(0)=='1'){
 							change_EnodeID="2"+loop_RoadLink.EnodeID.substring(1,loop_RoadLink.EnodeID.length());
 						}
-						loop_RoadLink.next_ID=seNodeID_IDArray.get(change_EnodeID);
+						loop_RoadLink.next_ID=sNodeID_IDArray.get(change_EnodeID);
+					}
+					if(loop_RoadLink.pre_ID==null){//按诸老师说的说法新增了容错判断
+						String change_SnodeID="";
+						if(loop_RoadLink.SnodeID.charAt(0)=='2'){
+							change_SnodeID="1"+loop_RoadLink.SnodeID.substring(1,loop_RoadLink.SnodeID.length());
+						}
+						else if(loop_RoadLink.SnodeID.charAt(0)=='1'){
+							change_SnodeID="2"+loop_RoadLink.SnodeID.substring(1,loop_RoadLink.SnodeID.length());
+						}
+						loop_RoadLink.pre_ID=eNodeID_IDArray.get(change_SnodeID);
 					}
 					file_roadLink.write(loop_RoadLink.toString()+"\r\n");
 					id_RoadLink.put(loop_RoadLink.ID,loop_RoadLink);
 					if(loop_RoadLink.next_ID!=null){
 						for(String str_id : loop_RoadLink.next_ID){
+							RoadLink temp_RoadLink_judge=id_RoadLink.get(str_id);
+							if(temp_RoadLink_judge!=null)
+								roadLink_queue.add(temp_RoadLink_judge);
+						}
+					}
+					if(loop_RoadLink.pre_ID!=null){
+						for(String str_id : loop_RoadLink.pre_ID){
 							RoadLink temp_RoadLink_judge=id_RoadLink.get(str_id);
 							if(temp_RoadLink_judge!=null)
 								roadLink_queue.add(temp_RoadLink_judge);
