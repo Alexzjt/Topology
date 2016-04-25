@@ -8,7 +8,7 @@ public class RoadLink {
 	public char road_attribute;
 	public String ID,highway_ID=null,SnodeID,EnodeID,station=null,tachometer=null;
 	public List<LonLat> lonlat_list;
-	public List<String> next_ID;
+	public List<String> next_ID,pre_ID;
 	RoadLink(String line){
 		String[] line_array=line.split("\",\"|\"");
 		int[] speed=RoadLink.speed_judge(Integer.valueOf(line_array[25]));
@@ -169,10 +169,11 @@ public class RoadLink {
 	}
 	@Override
 	//输出格式为
-	//ID,下一ID，长度，是否匝道，道路类型，所属高速编号，起点经度、起点纬度、车道数，最低限速，最高限速，mid文件中行号，测速仪，测速仪桩号，收费站，收费站桩号，桩号开始，桩号结束，桩号方向。
+	//ID,下一ID，前一ID，长度，是否匝道，道路类型，所属高速编号，起点经度、起点纬度、车道数，最低限速，最高限速，mid文件中行号，测速仪，测速仪桩号，收费站，收费站桩号，桩号开始，桩号结束，桩号方向。
 	public String toString() {
 		StringBuilder return_str=new StringBuilder(ID);
 		StringBuilder next_ID_list=new StringBuilder("");
+		StringBuilder pre_ID_list=new StringBuilder("");
 		if(next_ID!=null){
 			int length=next_ID.size();
 			for(int i=0;i<length-1;i++){
@@ -180,8 +181,15 @@ public class RoadLink {
 			}
 			next_ID_list.append(next_ID.get(length-1));
 		}
-		return_str.append(",").append(next_ID_list.toString()).append(",")
-		.append(String.valueOf(length)).append(",").append(String.valueOf(isRamp)).append(",")
+		if(pre_ID!=null){
+			int length=pre_ID.size();
+			for(int i=0;i<length-1;i++){
+				pre_ID_list.append(pre_ID.get(i)).append("#");
+			}
+			pre_ID_list.append(pre_ID.get(length-1));
+		}
+		return_str.append(",").append(next_ID_list.toString()).append(",").append(pre_ID_list.toString())
+		.append(",").append(String.valueOf(length)).append(",").append(String.valueOf(isRamp)).append(",")
 		.append(String.valueOf(road_attribute)).append(",").append(String.valueOf(highway_ID)).append(",")
 		.append(lonlat_list.get(0).toString()).append(",").append(String.valueOf(lane))
 		.append(",").append(String.valueOf(speed_lowbound)).append(",")
