@@ -15,5 +15,8 @@ public class Config {
 	public static double EARTH_RADIUS=6371393;    //地球半径 米
 	public static double TOLERANCE=500; //米。预设的误差值，用于计算收费站、测速仪经纬度与路链、路段经纬度序列之间的距离，小于此值说明在一个路上
 	public static String START_ROADLINK_ID="16777580";//预设的起始路链号
-	
+	/////////////////////////////////////////////////
+	public static String ROADLINK_MID_FILE="D:\\zjt\\路网拓扑zjt\\路网拓扑结果\\路链拓扑.csv";  //生成的中间文件
+	public static String STATION_ROADLINK="D:\\zjt\\路网拓扑zjt\\路网拓扑结果\\收费站所在路链.csv";  //生成的中间文件
+	public static String SHORTEST_PATH_DIR;
 }

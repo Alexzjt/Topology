@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.List;
 
 public class RoadLink {
@@ -35,6 +36,17 @@ public class RoadLink {
 		EnodeID=line_array[RoadLink.judge_ENode(direction)];
 		isRamp=RoadLink.judge_Ramp(line_array[4]);
 		road_attribute=RoadLink.judge_Road_attribute(line_array[4]);
+	}
+	public RoadLink(String[] line_array,boolean isReverse_toString) {
+		// TODO Auto-generated constructor stub
+		//这个是为中间文件RoadLink设计的针对toString方法设计的逆函数
+		ID=line_array[0];
+		next_ID=Arrays.asList(line_array[1].split("#"));
+		pre_ID=Arrays.asList(line_array[2].split("#"));
+		length=Double.valueOf(line_array[3]);
+		isRamp=Boolean.valueOf(line_array[4]);
+		road_attribute=line_array[5].charAt(0);
+		
 	}
 	public static int judge_SNode(int direction){  
 		if(direction==2)   //顺行
