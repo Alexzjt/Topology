@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class RoadLink {
 		isRamp=RoadLink.judge_Ramp(line_array[4]);
 		road_attribute=RoadLink.judge_Road_attribute(line_array[4]);
 	}
+	/*
 	RoadLink(String[] line_array){
 		int[] speed=RoadLink.speed_judge(Integer.valueOf(line_array[25]));
 		speed_lowbound=speed[0];
@@ -37,16 +39,22 @@ public class RoadLink {
 		isRamp=RoadLink.judge_Ramp(line_array[4]);
 		road_attribute=RoadLink.judge_Road_attribute(line_array[4]);
 	}
-	public RoadLink(String[] line_array,boolean isReverse_toString) {
+	*/
+	public RoadLink(String[] line_array) {
 		// TODO Auto-generated constructor stub
 		//这个是为中间文件RoadLink设计的针对toString方法设计的逆函数
 		ID=line_array[0];
-		next_ID=Arrays.asList(line_array[1].split("#"));
-		pre_ID=Arrays.asList(line_array[2].split("#"));
+		next_ID=line_array[1].equals("")?null:Arrays.asList(line_array[1].split("#"));
+		//pre_ID=line_array[2].equals("")?null:Arrays.asList(line_array[2].split("#"));
 		length=Double.valueOf(line_array[3]);
-		isRamp=Boolean.valueOf(line_array[4]);
-		road_attribute=line_array[5].charAt(0);
-		
+		//isRamp=Boolean.valueOf(line_array[4]);
+		//road_attribute=line_array[5].charAt(0);
+		//highway_ID=line_array[6];
+		//lonlat_list=new ArrayList<LonLat>(1);
+		//lonlat_list.add(new LonLat(line_array[7],line_array[8]));
+		//lane=Integer.valueOf(line_array[9]);
+		//line=Integer.valueOf(line_array[12]);
+		station=line_array[15].equals("null")?null:line_array[15];
 	}
 	public static int judge_SNode(int direction){  
 		if(direction==2)   //顺行
