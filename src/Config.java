@@ -9,7 +9,7 @@ public class Config {
 	public static String MAP_MID="D:\\zjt\\重庆地图\\Rchongqing.txt";	   //.mid文件的存储路径
 	public static String STATION="D:\\zjt\\station.csv";	   //收费站文件的存储路径
 	public static String TACHYMETER="D:\\zjt\\CSY.txt";	   //测速仪文件的存储路径
-	public static String ROADLINK_OUTPUT="D:\\zjt\\路网拓扑zjt\\roadlink"+DF.format(new Date())+".csv"; //路链的输出情况
+	public static String ROADLINK_OUTPUT="D:\\zjt\\路网拓扑zjt\\roadlink"; //路链的输出情况
 	public static String OLD_TOPOLOGY="D:\\zjt\\路网拓扑0629.csv";  //常兵做的老拓扑，但是其中的测速仪数据是能用的
 	public static int HIGHWAY_COUNT=14000;    //从之前的数据了解到，高速公路路链总共是14000条左右
 	public static double EARTH_RADIUS=6371393;    //地球半径 米
@@ -17,6 +17,6 @@ public class Config {
 	public static String START_ROADLINK_ID="16777580";//预设的起始路链号
 	/////////////////////////////////////////////////
 	public static String ROADLINK_MID_FILE="D:\\zjt\\路网拓扑zjt\\路网拓扑结果\\路链拓扑program.csv";  //生成的中间文件
-	public static String STATION_SHORTEST_PATH_LENGTH="D:\\zjt\\路网拓扑zjt\\路网拓扑结果\\收费站最短距离.csv";  //生成的中间文件
+	public static String STATION_SHORTEST_PATH_LENGTH="D:\\zjt\\路网拓扑zjt\\路网拓扑结果\\收费站最短距离"+DF.format(new Date())+".csv";  //生成的中间文件
 	public static String SHORTEST_PATH_DIR;
 }

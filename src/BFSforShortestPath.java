@@ -28,6 +28,7 @@ public class BFSforShortestPath {
 			}
 			for (Iterator<String> iterator = stationID_RoadLinkForSPID_hash.keySet().iterator(); iterator.hasNext();) {
 				String loop_station = iterator.next();
+				System.out.println(loop_station);
 				for (Iterator<String> iterator1 = stationID_RoadLinkForSPID_hash.keySet().iterator(); iterator1
 						.hasNext();) {
 					String loop_station1 = iterator1.next();
@@ -48,8 +49,6 @@ public class BFSforShortestPath {
 								StatusForShortestPath loop_status = queue.poll();
 								if (!loop_status.roadLink.visit) {
 									loop_status.roadLink.visit=true;
-									if (loop_status.roadLink.next_ID == null)
-										continue;
 									if (loop_status.roadLink.ID.equals(loop_roadlink_id1)) {
 										if (minCost == 0) {
 											minCost = loop_status.cost;
@@ -59,6 +58,8 @@ public class BFSforShortestPath {
 										queue.clear();
 										break;
 									}
+									if (loop_status.roadLink.next_ID == null)
+										continue;
 									for (String next_RoadLinkForSP_id : loop_status.roadLink.next_ID) {
 										RoadLinkForSP temp_roadlink = id_RoadLinkForSP_hash.get(next_RoadLinkForSP_id);
 										// System.out.println(loop_status.roadLink.ID);
