@@ -43,7 +43,7 @@ public class BFSforShortestPath {
 						continue;
 					}
 					double minCost = 0;
-					//List<String> minCostPath=new ArrayList<String>(200);
+					List<String> minCostPath=new ArrayList<String>(200);
 					for (String loop_roadlink_id : stationID_RoadLinkID_hash.get(loop_station)) {
 						for (String loop_roadlink_id1 : stationID_RoadLinkID_hash.get(loop_station1)) {
 							ArrayDeque<StatusForShortestPath> queue = new ArrayDeque<StatusForShortestPath>();
@@ -58,14 +58,7 @@ public class BFSforShortestPath {
 										} else if (minCost > loop_status.cost) {
 											minCost = loop_status.cost;
 										}
-										//minCostPath=loop_status.path;
-										BufferedWriter loop_file=new BufferedWriter(new FileWriter(Config.SHORTEST_PATH_DIR+
-												loop_station+"\\"+loop_station1+"\\"+String.valueOf((int)loop_status.cost)+"_"
-												+String.valueOf(Config.water++)+".csv"));
-										for(String loop_path_roadlink_id : loop_status.path){
-											loop_file.write(id_RoadLink_hash.get(loop_path_roadlink_id).toString()+"\r\n");
-										}
-										loop_file.close();
+										minCostPath=loop_status.path;
 										break;
 									}
 									if (loop_status.roadLink.next_ID == null)
@@ -90,7 +83,13 @@ public class BFSforShortestPath {
 							}
 						}
 					}
-					//System.out.println(loop_station + "," + loop_station1 + "," + String.valueOf(minCost));
+					BufferedWriter loop_file=new BufferedWriter(new FileWriter(Config.SHORTEST_PATH_DIR+
+							loop_station+"\\"+loop_station1+"\\"+String.valueOf((int)minCost)+"_"
+							+String.valueOf(Config.water++)+".csv"));
+					for(String loop_path_roadlink_id : minCostPath){
+						loop_file.write(id_RoadLink_hash.get(loop_path_roadlink_id).toString()+"\r\n");
+					}
+					loop_file.close();
 					file_SPResult.write(loop_station + "," + loop_station1 + "," + String.valueOf(minCost)+"\r\n");
 				}
 			}
