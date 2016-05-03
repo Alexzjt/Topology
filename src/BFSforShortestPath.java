@@ -4,7 +4,7 @@ import java.util.*;
 public class BFSforShortestPath {
 	public static void main(String[] args) {
 		try {
-			BufferedReader file_roadlink = new BufferedReader(new FileReader(Config.ROADLINK_MID_FILE));
+			BufferedReader file_roadlink = new BufferedReader(new FileReader(Config.ROADLINK_MIDDLE_FILE));
 			BufferedWriter file_SPResult = new BufferedWriter(new FileWriter(Config.STATION_SHORTEST_PATH_LENGTH));
 			HashMap<String, RoadLinkForSP> id_RoadLinkForSP_hash = new HashMap<String, RoadLinkForSP>();
 			HashMap<String, List<String>> stationID_RoadLinkForSPID_hash = new HashMap<String, List<String>>();
