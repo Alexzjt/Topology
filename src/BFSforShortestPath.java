@@ -55,10 +55,11 @@ public class BFSforShortestPath {
 									if (loop_status.roadLink.ID.equals(loop_roadlink_id1)) {
 										if (minCost == 0) {
 											minCost = loop_status.cost;
+											minCostPath=loop_status.path;
 										} else if (minCost > loop_status.cost) {
 											minCost = loop_status.cost;
+											minCostPath=loop_status.path;
 										}
-										minCostPath=loop_status.path;
 										break;
 									}
 									if (loop_status.roadLink.next_ID == null)
