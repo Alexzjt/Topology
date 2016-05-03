@@ -3,8 +3,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class RoadLink {
-	public int speed_upbound,speed_lowbound,lane,direction,line;
-	public double length,stake_start=0,stake_end=0,stake_direction=0
+	public int speed_upbound,speed_lowbound,lane,direction,line,stake_direction=0;
+	public double length,stake_start=0,stake_end=0
 			,station_stake=0,tachometer_stake=0;
 	public boolean isRamp,visit=false;
 	public char road_attribute;
@@ -40,22 +40,30 @@ public class RoadLink {
 		road_attribute=RoadLink.judge_Road_attribute(line_array[4]);
 	}
 	
-//	public RoadLink(String[] line_array) {
-//		// TODO Auto-generated constructor stub
-//		//这个是为中间文件RoadLink设计的针对toString方法设计的逆函数
-//		ID=line_array[0];
-//		next_ID=line_array[1].equals("")?null:Arrays.asList(line_array[1].split("#"));
-//		//pre_ID=line_array[2].equals("")?null:Arrays.asList(line_array[2].split("#"));
-//		length=Double.valueOf(line_array[3]);
-//		//isRamp=Boolean.valueOf(line_array[4]);
-//		//road_attribute=line_array[5].charAt(0);
-//		//highway_ID=line_array[6];
-//		//lonlat_list=new ArrayList<LonLat>(1);
-//		//lonlat_list.add(new LonLat(line_array[7],line_array[8]));
-//		//lane=Integer.valueOf(line_array[9]);
-//		//line=Integer.valueOf(line_array[12]);
-//		station=line_array[15].equals("null")?null:line_array[15];
-//	}
+	public RoadLink(String[] line_array,boolean forRoadLinkMidFile) {
+		// TODO Auto-generated constructor stub
+		//这个是为中间文件RoadLink设计的针对toString方法设计的逆函数
+		ID=line_array[0];
+		next_ID=line_array[1].equals("")?null:Arrays.asList(line_array[1].split("#"));
+		pre_ID=line_array[2].equals("")?null:Arrays.asList(line_array[2].split("#"));
+		length=Double.valueOf(line_array[3]);
+		isRamp=Boolean.valueOf(line_array[4]);
+		road_attribute=line_array[5].charAt(0);
+		highway_ID=line_array[6];
+		lonlat_list=new ArrayList<LonLat>(1);
+		lonlat_list.add(new LonLat(line_array[7],line_array[8]));
+		lane=Integer.valueOf(line_array[9]);
+		speed_lowbound=Integer.valueOf(line_array[10]);
+		speed_upbound=Integer.valueOf(line_array[11]);
+		line=Integer.valueOf(line_array[12]);
+		tachometer=line_array[13].equals("null")?null:line_array[13];
+		tachometer_stake=Double.valueOf(line_array[14]);
+		station=line_array[15].equals("null")?null:line_array[15];
+		station_stake=Double.valueOf(line_array[16]);
+		stake_start=Double.valueOf(line_array[17]);
+		stake_end=Double.valueOf(line_array[18]);
+		stake_direction=Integer.valueOf(line_array[19]);
+	}
 	public static int judge_SNode(int direction){  
 		if(direction==2)   //顺行
 			return 10;

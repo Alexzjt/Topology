@@ -38,6 +38,7 @@ public class BFSforShortestPath {
 						continue;
 					}
 					double minCost = 0;
+					
 					for (String loop_roadlink_id : stationID_RoadLinkForSPID_hash.get(loop_station)) {
 						for (String loop_roadlink_id1 : stationID_RoadLinkForSPID_hash.get(loop_station1)) {
 							//@SuppressWarnings("unchecked")
@@ -64,14 +65,14 @@ public class BFSforShortestPath {
 										RoadLinkForSP temp_roadlink = id_RoadLinkForSP_hash.get(next_RoadLinkForSP_id);
 										// System.out.println(loop_status.roadLink.ID);
 										double temp_cost = loop_status.cost + temp_roadlink.length;
-										// List<String>
-										// temp_list=loop_status.path;
-										// temp_list.add(temp_roadlink.ID);
-										queue.add(new StatusForShortestPath(temp_roadlink, temp_cost));
+										List<String> temp_list=loop_status.path;
+										temp_list.add(temp_roadlink.ID);
+										queue.add(new StatusForShortestPath(temp_roadlink, temp_cost,temp_list));
 									}
 									id_RoadLinkForSP_hash.put(loop_status.roadLink.ID,loop_status.roadLink);
 								}
 							}
+							//这块代码是将所有visit状态设置为false；
 							for (Iterator<String> iterator2 = id_RoadLinkForSP_hash.keySet().iterator(); iterator2.hasNext();) {
 								String reset_ID=iterator2.next();
 								RoadLinkForSP reset_RoadLink = id_RoadLinkForSP_hash.get(reset_ID);
