@@ -18,7 +18,8 @@ public class Config {
 	/////////////////////////////////////////////////
 	public static String ROADLINK_MIDDLE_FILE="D:\\zjt\\路网拓扑zjt\\路网拓扑结果\\路链拓扑program.csv";  //生成的中间文件
 	public static String STATION_SHORTEST_PATH_LENGTH="D:\\zjt\\路网拓扑zjt\\路网拓扑结果\\收费站最短距离"+DF.format(new Date())+".csv";  //生成的中间文件
-	public static String SHORTEST_PATH_DIR;
+	public static String SHORTEST_PATH_DIR="D:\\zjt\\OD寻径结果\\";
+	public static int water=0;
 	////////////////////////////////////////////////////////////
 	public static String CYSNEARESTROADLINK="D:\\zjt\\路网拓扑zjt\\路网拓扑结果\\测速仪与路链相距最短距离.csv";  //给金玉辉算的
 }
