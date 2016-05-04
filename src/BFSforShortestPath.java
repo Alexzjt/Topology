@@ -48,7 +48,7 @@ public class BFSforShortestPath {
 						for (String loop_roadlink_id1 : stationID_RoadLinkID_hash.get(loop_station1)) {
 							ArrayDeque<StatusForShortestPath> queue = new ArrayDeque<StatusForShortestPath>();
 							List<String> init_path=new ArrayList<String>(200);
-							init_path.add(id_RoadLink_hash.get(loop_roadlink_id).ID);
+							init_path.add(loop_roadlink_id);
 							queue.add(new StatusForShortestPath(id_RoadLink_hash.get(loop_roadlink_id),0,init_path));
 							while (!queue.isEmpty()) {
 								StatusForShortestPath loop_status = queue.poll();
