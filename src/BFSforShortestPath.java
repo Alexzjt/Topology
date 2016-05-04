@@ -68,7 +68,7 @@ public class BFSforShortestPath {
 										RoadLink temp_roadlink = id_RoadLink_hash.get(next_RoadLink_id);
 										// System.out.println(loop_status.roadLink.ID);
 										double temp_cost = loop_status.cost + temp_roadlink.length;
-										List<String> temp_list=loop_status.path;
+										List<String> temp_list=new ArrayList<String>(loop_status.path);
 										temp_list.add(temp_roadlink.ID);
 										queue.add(new StatusForShortestPath(temp_roadlink, temp_cost,temp_list));
 									}
