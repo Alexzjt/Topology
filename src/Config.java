@@ -25,4 +25,5 @@ public class Config {
 	////////////////////////////////////////////////////////////
 	public static String HIGHWAY_START_END="E:\\百度云同步盘\\诸老师这边的事\\路网拓扑划分201604\\高速编号所在起止路链.csv";
 	public static String ROADLINK_HIGHWAY_ID="D:\\zjt\\路网拓扑zjt\\路网拓扑结果\\路链拓扑"+DF.format(new Date())+".csv";
+	public static String HIGHWAY_ID_LONLAT="D:\\zjt\\路网拓扑zjt\\路网拓扑结果\\高速公路ID及其经纬度"+DF.format(new Date())+".csv";
 }
