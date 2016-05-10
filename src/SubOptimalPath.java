@@ -1,19 +1,36 @@
 import java.io.*;
 import java.util.*;
+
 public class SubOptimalPath {
-	public static void main(String[] args){
+	static HashMap<String, RoadLink> id_RoadLink_hash;
+	static HashMap<String, List<String>> stationID_RoadLinkID_hash;
+	static HashMap<String, Double> SE_length;
+	static List<String> stationID;
+	static Comparator<StatusForShortestPath> order = new Comparator<StatusForShortestPath>() {
+		public int compare(StatusForShortestPath obj1, StatusForShortestPath obj2) {
+			if (obj1.cost < obj2.cost)
+				return -1;
+			else if (obj1.cost == obj2.cost)
+				return 0;
+			else {
+				return 1;
+			}
+		}
+	};
+
+	public static void main(String[] args) {
 		try {
-			BufferedReader file_roadlink = new BufferedReader(new FileReader(Config.ROADLINK_MIDDLE_FILE_SUB_OPT));//读路链拓扑文件
+			BufferedReader file_roadlink = new BufferedReader(new FileReader(Config.ROADLINK_MIDDLE_FILE_SUB_OPT));// 读路链拓扑文件
 			BufferedReader file_station_SP = new BufferedReader(new FileReader(Config.SHORTEST_PATH_LENGTH_IN));
-			HashMap<String, RoadLink> id_RoadLink_hash = new HashMap<String, RoadLink>();
-			HashMap<String, List<String>> stationID_RoadLinkID_hash = new HashMap<String, List<String>>();
-			HashMap<String, Double> SE_length=new HashMap<String, Double>();
-			List<String> stationID=new ArrayList<String>(220);
+			id_RoadLink_hash = new HashMap<String, RoadLink>();
+			stationID_RoadLinkID_hash = new HashMap<String, List<String>>();
+			SE_length = new HashMap<String, Double>();
+			stationID = new ArrayList<String>(220);
 			String line;
 			while ((line = file_roadlink.readLine()) != null) {
 				// System.out.println(line);
 				String[] array_line = line.split(",");
-				RoadLink loop_roadlink = new RoadLink(array_line,true);
+				RoadLink loop_roadlink = new RoadLink(array_line, true);
 				id_RoadLink_hash.put(loop_roadlink.ID, loop_roadlink);
 				if (loop_roadlink.station != null) {
 					if (stationID_RoadLinkID_hash.containsKey(loop_roadlink.station)) {
@@ -25,82 +42,144 @@ public class SubOptimalPath {
 						temp_str_list.add(loop_roadlink.ID);
 						stationID_RoadLinkID_hash.put(loop_roadlink.station, temp_str_list);
 					}
-					if(!stationID.contains(loop_roadlink.station)){
+					if (!stationID.contains(loop_roadlink.station)) {
 						stationID.add(loop_roadlink.station);
 					}
 				}
 			}
 			while ((line = file_station_SP.readLine()) != null) {
-				String[] line_array=line.split(",");
-				SE_length.put(line_array[0]+"_"+line_array[1],Double.valueOf(line_array[2]));
+				String[] line_array = line.split(",");
+				SE_length.put(line_array[0] + "_" + line_array[1], Double.valueOf(line_array[2]));
 			}
-			newDir(stationID,Config.SUB_OPTIMAL_PATH_DIR);
-			for (Iterator<String> iterator = stationID_RoadLinkID_hash.keySet().iterator(); iterator.hasNext();) {
-				String loop_station = iterator.next();
-				System.out.println(loop_station);
-				for (Iterator<String> iterator1 = stationID_RoadLinkID_hash.keySet().iterator(); iterator1
-						.hasNext();) {
-					String loop_station1 = iterator1.next();
-					System.out.println(loop_station+"_"+loop_station1);
-					if (loop_station.equals(loop_station1)) {
+			file_roadlink.close();
+			file_station_SP.close();
+			for (String origin_station : stationID) {
+				for (String destination_station : stationID) {
+					if (origin_station.equals(destination_station))
 						continue;
+					String file_sp_path = append_file_path(Config.SUB_OPTIMAL_PATH_DIR, origin_station,
+							destination_station);
+					BufferedReader file_sp = new BufferedReader(new FileReader(file_sp_path));
+					Queue<StatusForShortestPath> priorityQueue = new PriorityQueue<StatusForShortestPath>(5, order);
+					List<String> sp_path = new ArrayList<String>(100);
+					while ((line = file_sp.readLine()) != null) {
+						String[] array_line = line.split(",");
+						sp_path.add(array_line[0]);
 					}
-					double upbound = SE_length.get(loop_station+"_"+loop_station1)*1.25;
-					//List<String> minCostPath=new ArrayList<String>(200);
-					for (String loop_roadlink_id : stationID_RoadLinkID_hash.get(loop_station)) {
-						for (String loop_roadlink_id1 : stationID_RoadLinkID_hash.get(loop_station1)) {
-							ArrayDeque<StatusForShortestPath> queue = new ArrayDeque<StatusForShortestPath>();
-							List<String> init_path=new ArrayList<String>(200);
-							init_path.add(loop_roadlink_id);
-							queue.add(new StatusForShortestPath(id_RoadLink_hash.get(loop_roadlink_id),0,init_path));
-							while (!queue.isEmpty()) {
-								StatusForShortestPath loop_status = queue.poll();
-								if (loop_status.cost<upbound) {
-									if (loop_status.roadLink.ID.equals(loop_roadlink_id1)) {
-										System.out.println(loop_station+"_"+loop_station1+" "+loop_status.cost);
-										BufferedWriter loop_file=new BufferedWriter(new FileWriter(Config.SUB_OPTIMAL_PATH_DIR+
-												loop_station+"\\"+loop_station1+"\\"+String.valueOf((int)loop_status.cost)+"_"
-												+String.valueOf(Config.water++)+".csv"));
-										for(String loop_path_roadlink_id : loop_status.path){
-											loop_file.write(id_RoadLink_hash.get(loop_path_roadlink_id).toString()+"\r\n");
-										}
-										loop_file.close();
-										continue;
-									}
-									if (loop_status.roadLink.next_ID == null)
-										continue;
-									for (String next_RoadLink_id : loop_status.roadLink.next_ID) {
-										if(!loop_status.path.contains(next_RoadLink_id)){
-											RoadLink temp_roadlink = id_RoadLink_hash.get(next_RoadLink_id);
-											// System.out.println(loop_status.roadLink.ID);
-											double temp_cost = loop_status.cost + temp_roadlink.length;
-											List<String> temp_list=new ArrayList<String>(loop_status.path);
-											temp_list.add(temp_roadlink.ID);
-											queue.add(new StatusForShortestPath(temp_roadlink, temp_cost,temp_list));
+					for (int i = 0; i < sp_path.size(); i++) {
+						RoadLink out_Roadlink = id_RoadLink_hash.get(sp_path.get(i));
+						if (out_Roadlink.next_ID.size() > 1) { // 如果这个路链的下个路链是分叉的。就说明有第二条路可以走，可以从此离开最短路径。
+							for (int j = i + 1; j < sp_path.size(); j++) {
+								RoadLink in_Roadlink = id_RoadLink_hash.get(sp_path.get(j));
+								if (in_Roadlink.pre_ID.size() > 1) { // 说明可以从此进入最短路径中
+									for (String out_ID : out_Roadlink.next_ID) {
+										if (!out_ID.equals(sp_path.get(i + 1))) { // 这个出口必须不能和最短路径走一条路
+											StatusForShortestPath mid_status = BFS(out_ID, sp_path.get(j));
+											if (mid_status != null) {
+												StatusForShortestPath record_status = new StatusForShortestPath();
+												for (int i1 = 0; i1 <= i; i1++) {
+													record_status.add_RoadLink(id_RoadLink_hash.get(sp_path.get(i1)));
+												}
+												record_status.append_Status_Path_Cost(mid_status);
+												for (int i1 = j + 1; i1 <= sp_path.size(); i1++) {
+													record_status.add_RoadLink(id_RoadLink_hash.get(sp_path.get(i1)));
+												}
+												priorityQueue.add(record_status);
+											}
 										}
 									}
-									id_RoadLink_hash.put(loop_status.roadLink.ID,loop_status.roadLink);
 								}
 							}
 						}
 					}
+					StatusForShortestPath sub_optimal_status = priorityQueue.poll();
+					if (sub_optimal_status.cost < SE_length.get(origin_station + "_" + destination_station)
+							+ Config.TOLERANCE_SUB_OPT) {
+						identify_Status(sub_optimal_status,
+								append_file_path(Config.SUB_OPTIMAL_PATH_DIR, origin_station, destination_station));
+					}
 				}
 			}
-			file_roadlink.close();
-			file_station_SP.close();
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
 	}
-	public static void newDir(List<String> array,String path){
-		int length=array.size();
-		for(int i=0;i<length;i++){
-			for(int i1=0;i1<length;i1++){
-				File loop_file=new File(path+array.get(i)+"\\"+array.get(i1));
-				if(!loop_file.exists())
-					loop_file.mkdirs();
+
+	public static StatusForShortestPath BFS(String origin_id, String destination_id) {
+		double minCost = 0;
+		List<String> minCostPath = new ArrayList<String>(200);
+		StatusForShortestPath final_status = null;
+		ArrayDeque<StatusForShortestPath> queue = new ArrayDeque<StatusForShortestPath>();
+		List<String> init_path = new ArrayList<String>(200);
+		init_path.add(origin_id);
+		queue.add(new StatusForShortestPath(id_RoadLink_hash.get(origin_id), 0, init_path));
+		while (!queue.isEmpty()) {
+			StatusForShortestPath loop_status = queue.poll();
+			if (!loop_status.roadLink.visit) {
+				loop_status.roadLink.visit = true;
+				if (loop_status.roadLink.ID.equals(destination_id)) {
+					if (minCost == 0) {
+						minCost = loop_status.cost;
+						minCostPath = loop_status.path;
+						final_status = loop_status;
+					} else if (minCost > loop_status.cost) {
+						minCost = loop_status.cost;
+						minCostPath = loop_status.path;
+						final_status = loop_status;
+					}
+					break;
+				}
+				if (loop_status.roadLink.next_ID == null)
+					continue;
+				for (String next_RoadLink_id : loop_status.roadLink.next_ID) {
+					RoadLink temp_roadlink = id_RoadLink_hash.get(next_RoadLink_id);
+					// System.out.println(loop_status.roadLink.ID);
+					double temp_cost = loop_status.cost + temp_roadlink.length;
+					List<String> temp_list = new ArrayList<String>(loop_status.path);
+					temp_list.add(temp_roadlink.ID);
+					queue.add(new StatusForShortestPath(temp_roadlink, temp_cost, temp_list));
+				}
+				id_RoadLink_hash.put(loop_status.roadLink.ID, loop_status.roadLink);
 			}
+		}
+		set_visit_false();
+		return final_status;
+	}
+
+	public static void set_visit_false() {
+		for (Iterator<String> iterator2 = id_RoadLink_hash.keySet().iterator(); iterator2.hasNext();) {
+			String reset_ID = iterator2.next();
+			RoadLink reset_RoadLink = id_RoadLink_hash.get(reset_ID);
+			reset_RoadLink.visit = false;
+			id_RoadLink_hash.put(reset_ID, reset_RoadLink);
+		}
+	}
+
+	public static String append_file_path(String dir, String origin, String destination) {
+		StringBuilder str = new StringBuilder(dir);
+		str.append(origin).append("\\").append(destination);
+		File path = new File(str.toString());
+		if (path.isDirectory()) {
+			String[] s = path.list();
+			if (s.length != 0) {
+				return s[0];
+			}
+		}
+		return null;
+	}
+
+	public static void identify_Status(StatusForShortestPath status, String path) {
+		try {
+			BufferedWriter file = new BufferedWriter(
+					new FileWriter(path + "\\" + (int) status.cost + "_" + (Config.water++) + ".csv"));
+			for (String str : status.path) {
+				file.write(id_RoadLink_hash.get(str).toString() + "\r\n");
+			}
+			file.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }
