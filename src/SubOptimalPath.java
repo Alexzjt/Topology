@@ -55,48 +55,28 @@ public class SubOptimalPath {
 			file_station_SP.close();
 			for (String origin_station : stationID) {
 				for (String destination_station : stationID) {
+					System.out.println(origin_station+"_"+destination_station);
 					if (origin_station.equals(destination_station))
 						continue;
 					String file_sp_path = append_file_path(Config.SUB_OPTIMAL_PATH_DIR, origin_station,
 							destination_station);
 					BufferedReader file_sp = new BufferedReader(new FileReader(file_sp_path));
-					Queue<StatusForShortestPath> priorityQueue = new PriorityQueue<StatusForShortestPath>(5, order);
+					Queue<StatusForShortestPath> priorityQueue = new PriorityQueue<StatusForShortestPath>(10, order);
 					List<String> sp_path = new ArrayList<String>(100);
 					while ((line = file_sp.readLine()) != null) {
 						String[] array_line = line.split(",");
 						sp_path.add(array_line[0]);
 					}
-					for (int i = 0; i < sp_path.size(); i++) {
-						RoadLink out_Roadlink = id_RoadLink_hash.get(sp_path.get(i));
-						if (out_Roadlink.next_ID.size() > 1) { // 如果这个路链的下个路链是分叉的。就说明有第二条路可以走，可以从此离开最短路径。
-							for (int j = i + 1; j < sp_path.size(); j++) {
-								RoadLink in_Roadlink = id_RoadLink_hash.get(sp_path.get(j));
-								if (in_Roadlink.pre_ID.size() > 1) { // 说明可以从此进入最短路径中
-									for (String out_ID : out_Roadlink.next_ID) {
-										if (!out_ID.equals(sp_path.get(i + 1))) { // 这个出口必须不能和最短路径走一条路
-											StatusForShortestPath mid_status = BFS(out_ID, sp_path.get(j));
-											if (mid_status != null) {
-												StatusForShortestPath record_status = new StatusForShortestPath();
-												for (int i1 = 0; i1 <= i; i1++) {
-													record_status.add_RoadLink(id_RoadLink_hash.get(sp_path.get(i1)));
-												}
-												record_status.append_Status_Path_Cost(mid_status);
-												for (int i1 = j + 1; i1 <= sp_path.size(); i1++) {
-													record_status.add_RoadLink(id_RoadLink_hash.get(sp_path.get(i1)));
-												}
-												priorityQueue.add(record_status);
-											}
-										}
-									}
-								}
-							}
+					file_sp.close();
+					priorityQueue=find_Kth_Sub_Optimal_Path(priorityQueue, sp_path);
+					while(!priorityQueue.isEmpty()){
+						StatusForShortestPath sub_optimal_status = priorityQueue.poll();
+						if (sub_optimal_status.cost < SE_length.get(origin_station + "_" + destination_station)
+								+ Config.TOLERANCE_SUB_OPT) {
+							identify_Status(sub_optimal_status,
+									append_file_path(Config.SUB_OPTIMAL_PATH_DIR, origin_station, destination_station));
+							priorityQueue=find_Kth_Sub_Optimal_Path(priorityQueue,sub_optimal_status.path);
 						}
-					}
-					StatusForShortestPath sub_optimal_status = priorityQueue.poll();
-					if (sub_optimal_status.cost < SE_length.get(origin_station + "_" + destination_station)
-							+ Config.TOLERANCE_SUB_OPT) {
-						identify_Status(sub_optimal_status,
-								append_file_path(Config.SUB_OPTIMAL_PATH_DIR, origin_station, destination_station));
 					}
 				}
 			}
@@ -105,10 +85,39 @@ public class SubOptimalPath {
 			e.printStackTrace();
 		}
 	}
-
+	public static Queue<StatusForShortestPath> find_Kth_Sub_Optimal_Path(Queue<StatusForShortestPath> priorityQueue,List<String> sp_path){
+		for (int i = 0; i < sp_path.size(); i++) {
+			RoadLink out_Roadlink = id_RoadLink_hash.get(sp_path.get(i));
+			if (out_Roadlink.next_ID.size() > 1) { // 如果这个路链的下个路链是分叉的。就说明有第二条路可以走，可以从此离开最短路径。
+				for (int j = i + 1; j < sp_path.size(); j++) {
+					RoadLink in_Roadlink = id_RoadLink_hash.get(sp_path.get(j));
+					if (in_Roadlink.pre_ID.size() > 1) { // 说明可以从此进入最短路径中
+						for (String out_ID : out_Roadlink.next_ID) {
+							if (!out_ID.equals(sp_path.get(i + 1))) { // 这个出口必须不能和最短路径走一条路
+								StatusForShortestPath mid_status = BFS(out_ID, sp_path.get(j));
+								if (mid_status != null) {
+									StatusForShortestPath record_status = new StatusForShortestPath();
+									for (int i1 = 0; i1 <= i; i1++) {
+										record_status.add_RoadLink(id_RoadLink_hash.get(sp_path.get(i1)));
+									}
+									record_status.append_Status_Path_Cost(mid_status);
+									for (int i1 = j + 1; i1 < sp_path.size(); i1++) {
+										record_status.add_RoadLink(id_RoadLink_hash.get(sp_path.get(i1)));
+									}
+									priorityQueue.add(record_status);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return priorityQueue;
+	}
+	
 	public static StatusForShortestPath BFS(String origin_id, String destination_id) {
 		double minCost = 0;
-		List<String> minCostPath = new ArrayList<String>(200);
+		//List<String> minCostPath = new ArrayList<String>(200);
 		StatusForShortestPath final_status = null;
 		ArrayDeque<StatusForShortestPath> queue = new ArrayDeque<StatusForShortestPath>();
 		List<String> init_path = new ArrayList<String>(200);
@@ -121,11 +130,11 @@ public class SubOptimalPath {
 				if (loop_status.roadLink.ID.equals(destination_id)) {
 					if (minCost == 0) {
 						minCost = loop_status.cost;
-						minCostPath = loop_status.path;
+						//minCostPath = loop_status.path;
 						final_status = loop_status;
 					} else if (minCost > loop_status.cost) {
 						minCost = loop_status.cost;
-						minCostPath = loop_status.path;
+						//minCostPath = loop_status.path;
 						final_status = loop_status;
 					}
 					break;
@@ -163,7 +172,7 @@ public class SubOptimalPath {
 		if (path.isDirectory()) {
 			String[] s = path.list();
 			if (s.length != 0) {
-				return s[0];
+				return str.append("\\").append(s[0]).toString();
 			}
 		}
 		return null;
