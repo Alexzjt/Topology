@@ -88,10 +88,10 @@ public class SubOptimalPath {
 	public static Queue<StatusForShortestPath> find_Kth_Sub_Optimal_Path(Queue<StatusForShortestPath> priorityQueue,List<String> sp_path){
 		for (int i = 0; i < sp_path.size(); i++) {
 			RoadLink out_Roadlink = id_RoadLink_hash.get(sp_path.get(i));
-			if (out_Roadlink.next_ID.size() > 1) { // 如果这个路链的下个路链是分叉的。就说明有第二条路可以走，可以从此离开最短路径。
+			if (out_Roadlink.next_ID!=null&&out_Roadlink.next_ID.size() > 1) { // 如果这个路链的下个路链是分叉的。就说明有第二条路可以走，可以从此离开最短路径。
 				for (int j = i + 1; j < sp_path.size(); j++) {
 					RoadLink in_Roadlink = id_RoadLink_hash.get(sp_path.get(j));
-					if (in_Roadlink.pre_ID.size() > 1) { // 说明可以从此进入最短路径中
+					if (in_Roadlink.pre_ID!=null&&in_Roadlink.pre_ID.size() > 1) { // 说明可以从此进入最短路径中
 						for (String out_ID : out_Roadlink.next_ID) {
 							if (!out_ID.equals(sp_path.get(i + 1))) { // 这个出口必须不能和最短路径走一条路
 								StatusForShortestPath mid_status = BFS(out_ID, sp_path.get(j));
