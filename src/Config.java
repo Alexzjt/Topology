@@ -26,4 +26,9 @@ public class Config {
 	public static String HIGHWAY_START_END="E:\\百度云同步盘\\诸老师这边的事\\路网拓扑划分201604\\高速编号所在起止路链.csv";
 	public static String ROADLINK_HIGHWAY_ID="D:\\zjt\\路网拓扑zjt\\路网拓扑结果\\路链拓扑"+DF.format(new Date())+".csv";
 	public static String HIGHWAY_ID_LONLAT="D:\\zjt\\路网拓扑zjt\\路网拓扑结果\\高速公路ID及其经纬度"+DF.format(new Date())+".csv";
+	///////////////////////////////////////////////////////////////
+	public static String SUB_OPTIMAL_PATH_DIR="D:\\zjt\\OD寻径结果（含次优）\\";
+	public static String SHORTEST_PATH_LENGTH_IN="D:\\zjt\\路网拓扑zjt\\路网拓扑结果\\收费站最短距离20160504175825.csv";
+	public static String ROADLINK_MIDDLE_FILE_SUB_OPT="D:\\zjt\\路网拓扑zjt\\路网拓扑结果\\路链拓扑20160510112502.csv";
+	public static double TOLERANCE_SUB_OPT=180;
 }
