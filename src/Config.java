@@ -22,4 +22,7 @@ public class Config {
 	public static int water=0;
 	////////////////////////////////////////////////////////////
 	public static String CYSNEARESTROADLINK="D:\\zjt\\路网拓扑zjt\\路网拓扑结果\\测速仪与路链相距最短距离.csv";  //给金玉辉算的
+	////////////////////////////////////////////////////////////
+	public static String HIGHWAY_START_END="E:\\百度云同步盘\\诸老师这边的事\\路网拓扑划分201604\\高速编号所在起止路链.csv";
+	public static String ROADLINK_HIGHWAY_ID="D:\\zjt\\路网拓扑zjt\\路网拓扑结果\\路链拓扑"+DF.format(new Date())+".csv";
 }
