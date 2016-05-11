@@ -30,5 +30,6 @@ public class Config {
 	public static String SUB_OPTIMAL_PATH_DIR="D:\\zjt\\OD寻径结果（含次优）\\";
 	public static String SHORTEST_PATH_LENGTH_IN="D:\\zjt\\路网拓扑zjt\\路网拓扑结果\\收费站最短距离20160504175825.csv";
 	public static String ROADLINK_MIDDLE_FILE_SUB_OPT="D:\\zjt\\路网拓扑zjt\\路网拓扑结果\\路链拓扑20160510112502.csv";
-	public static double TOLERANCE_SUB_OPT=180;
+	public static double TOLERANCE_MULTIPLE=1.25;   //次优路径阈值设置为  最短路径乘以此因子。
+	public static double CHONGQING_G5001=180;   //重庆绕城高速的路径长度。
 }

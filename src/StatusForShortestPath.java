@@ -6,7 +6,7 @@ import com.sun.corba.se.spi.ior.ObjectKey;
 public class StatusForShortestPath {
 	public RoadLink roadLink;
 	public double cost;
-	public List<String> path;
+	public ArrayList<String> path;
 	public StatusForShortestPath(){
 		roadLink=null;
 		cost=0;
