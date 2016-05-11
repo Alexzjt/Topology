@@ -1,8 +1,4 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.*;
 import java.util.*;
 public class BFSforEachRoadLink {
 	static HashMap<String, RoadLink> id_RoadLink_hash;
@@ -31,9 +27,9 @@ public class BFSforEachRoadLink {
 						loop_file.mkdirs();
 					if(i==i1)
 						continue;
-					StatusForShortestPath result=BFS(roadlink_out_ID_List.get(i),roadLink_in_ID_List.get(i));
+					StatusForShortestPath result=BFS(roadlink_out_ID_List.get(i),roadLink_in_ID_List.get(i1));
 					if(result!=null){
-						identify_Status(result,Config.ROADLINK_EACH_DIR+roadlink_out_ID_List.get(i)+"\\"+roadLink_in_ID_List.get(i));
+						identify_Status(result,Config.ROADLINK_EACH_DIR+roadlink_out_ID_List.get(i)+"\\"+roadLink_in_ID_List.get(i1));
 					}
 				}
 			}
@@ -106,7 +102,7 @@ public class BFSforEachRoadLink {
 	public static void identify_Status(StatusForShortestPath status, String path) {
 		try {
 			BufferedWriter file = new BufferedWriter(
-					new FileWriter(path + "\\" + (int) status.cost + "╢нсе" + (Config.water++) + ".csv"));
+					new FileWriter(path + "\\" + (int) status.cost + "_" + (Config.water++) + ".csv"));
 			for (String str : status.path) {
 				file.write(id_RoadLink_hash.get(str).toString() + "\r\n");
 			}
