@@ -8,6 +8,7 @@ public class SubOptimalPath {
 	static HashMap<String, List<String>> stationID_RoadLinkID_hash;
 	static HashMap<String, Double> SE_length;
 	static List<String> stationID;
+	static ArrayList<List<String>> used_out_in_list=new ArrayList<List<String>>();
 	static Comparator<StatusForShortestPath> order = new Comparator<StatusForShortestPath>() {
 		public int compare(StatusForShortestPath obj1, StatusForShortestPath obj2) {
 			if (obj1.cost < obj2.cost)
@@ -62,6 +63,7 @@ public class SubOptimalPath {
 					String file_sp_path = append_file_path(Config.SUB_OPTIMAL_PATH_DIR, origin_station,
 							destination_station);
 					BufferedReader file_sp = new BufferedReader(new FileReader(file_sp_path));
+					used_out_in_list.clear();
 					Queue<StatusForShortestPath> priorityQueue = new PriorityQueue<StatusForShortestPath>(10, order);
 					ArrayList<String> sp_path = new ArrayList<String>(100);
 					while ((line = file_sp.readLine()) != null) {
@@ -121,7 +123,9 @@ public class SubOptimalPath {
 					RoadLink in_Roadlink = id_RoadLink_hash.get(sp_path.get(j));
 					if (in_Roadlink.pre_ID != null && in_Roadlink.pre_ID.size() > 1) { // 说明可以从此进入最短路径中
 						for (String out_ID : out_Roadlink.next_ID) {
-							if (!out_ID.equals(sp_path.get(i + 1))) { // 这个出口必须不能和最短路径走一条路
+							List<String> out_in_pair=Arrays.asList(out_ID,sp_path.get(j));
+							if (!out_ID.equals(sp_path.get(i + 1))&&!used_out_in_list.contains(out_in_pair)) { // 这个出口必须不能和最短路径走一条路
+								used_out_in_list.add(out_in_pair);
 								StatusForShortestPath mid_status = BFS(out_ID, sp_path.get(j));
 								if (mid_status != null) {
 									StatusForShortestPath record_status = new StatusForShortestPath();
