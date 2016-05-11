@@ -58,6 +58,7 @@ public class SubOptimalPath {
 			file_station_SP.close();
 			for (String origin_station : stationID) {
 				for (String destination_station : stationID) {
+					System.out.println(origin_station + "_" + destination_station);
 					if (origin_station.equals(destination_station))
 						continue;
 					String file_sp_path = append_file_path(Config.SUB_OPTIMAL_PATH_DIR, origin_station,
@@ -81,7 +82,6 @@ public class SubOptimalPath {
 							record_all_path.add(sub_optimal_status.path);
 							identify_Status(sub_optimal_status,
 									Config.SUB_OPTIMAL_PATH_DIR + origin_station + "\\" + destination_station);
-							System.out.println(origin_station + "_" + destination_station+" "+sub_optimal_status.cost);
 							priorityQueue = find_Kth_Sub_Optimal_Path(priorityQueue, sub_optimal_status.path);
 						}
 					}
