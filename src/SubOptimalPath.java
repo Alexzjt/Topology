@@ -75,7 +75,7 @@ public class SubOptimalPath {
 					while (!priorityQueue.isEmpty()) {
 						StatusForShortestPath sub_optimal_status = priorityQueue.poll();
 						if (sub_optimal_status.cost < SE_length.get(origin_station + "_" + destination_station)
-								* Config.TOLERANCE_MULTIPLE && !record_all_path.contains(sub_optimal_status.path)) {
+								* Config.TOLERANCE_MULTIPLE && !compare_similarity_in_Path_List(record_all_path,sub_optimal_status.path)) {
 							record_all_path.add(sub_optimal_status.path);
 							identify_Status(sub_optimal_status,
 									Config.SUB_OPTIMAL_PATH_DIR + origin_station + "\\" + destination_station);
@@ -89,6 +89,27 @@ public class SubOptimalPath {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
+	}
+	
+	public static boolean compare_similarity(ArrayList<String> list1,ArrayList<String> list2){
+		//此函数是为了比较两个路径是否相似，因为在前一版本中，出现了在服务区这种地方，匝道特别多，排列组合下来之后产生了特别多的相似次优路径。
+		//本函数是比较两个List是否相似。List1为原始路径，List2为待比较路径，顺序不能用错。
+		int length1=list1.size(),length2=list2.size();
+		ArrayList<String> l1=new ArrayList<String>(list1),l2=new ArrayList<String>(list2);
+		for(String str : l1){
+			l2.remove(str);
+		}
+		return (double)l2.size()/(double)length2<=Config.TOLERANCE_SIMILARITY;
+	}
+	
+	public static boolean compare_similarity_in_Path_List(ArrayList<ArrayList<String>> list1,ArrayList<String> list2){
+		//和上面那个函数不一样的地方在于，这个函数是在list1中查找是否有路径和list2相似。即List1是路径的集合，list2是路径。
+		for(ArrayList<String> l1 : list1){
+			if(compare_similarity(l1, list2)){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public static Queue<StatusForShortestPath> find_Kth_Sub_Optimal_Path(Queue<StatusForShortestPath> priorityQueue,
