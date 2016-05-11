@@ -126,7 +126,7 @@ public class SubOptimalPath {
 							List<String> out_in_pair=Arrays.asList(out_ID,sp_path.get(j));
 							if (!out_ID.equals(sp_path.get(i + 1))&&!used_out_in_list.contains(out_in_pair)) { // 这个出口必须不能和最短路径走一条路
 								used_out_in_list.add(out_in_pair);
-								StatusForShortestPath mid_status = BFS(out_ID, sp_path.get(j));
+								StatusForShortestPath mid_status = find_od_RoadLink_path(Config.ROADLINK_EACH_DIR,out_ID, sp_path.get(j));
 								if (mid_status != null) {
 									StatusForShortestPath record_status = new StatusForShortestPath();
 									for (int i1 = 0; i1 <= i; i1++) {
@@ -145,6 +145,27 @@ public class SubOptimalPath {
 			}
 		}
 		return priorityQueue;
+	}
+	
+	@SuppressWarnings("null")
+	public static StatusForShortestPath find_od_RoadLink_path(String dir, String origin, String destination){
+		String file=append_file_path(dir, origin, destination);
+		StatusForShortestPath return_status=null;
+		if(file!=null){
+			try {
+				BufferedReader reader=new BufferedReader(new FileReader(file));
+				String line;
+				while((line=reader.readLine())!=null){
+					String[] array_line=line.split(",");
+					return_status.add_RoadLink(id_RoadLink_hash.get(array_line[0]));
+				}
+				reader.close();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return return_status;
 	}
 
 	public static StatusForShortestPath BFS(String origin_id, String destination_id) {
