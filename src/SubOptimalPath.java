@@ -147,10 +147,10 @@ public class SubOptimalPath {
 		return priorityQueue;
 	}
 	
-	@SuppressWarnings("null")
+	
 	public static StatusForShortestPath find_od_RoadLink_path(String dir, String origin, String destination){
 		String file=append_file_path(dir, origin, destination);
-		StatusForShortestPath return_status=null;
+		StatusForShortestPath return_status=new StatusForShortestPath();
 		if(file!=null){
 			try {
 				BufferedReader reader=new BufferedReader(new FileReader(file));

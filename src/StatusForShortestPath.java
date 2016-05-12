@@ -7,40 +7,46 @@ public class StatusForShortestPath {
 	public RoadLink roadLink;
 	public double cost;
 	public ArrayList<String> path;
-	public StatusForShortestPath(){
-		roadLink=null;
-		cost=0;
-		path=new ArrayList<String>(200);
+
+	public StatusForShortestPath() {
+		roadLink = null;
+		cost = 0;
+		path = new ArrayList<String>(200);
 	}
+
 	public StatusForShortestPath(RoadLink r) {
 		// TODO Auto-generated constructor stub
-		roadLink=r;
-		cost=0;
-		path=new ArrayList<String>(200);
+		roadLink = r;
+		cost = 0;
+		path = new ArrayList<String>(200);
 	}
-	public StatusForShortestPath(RoadLink r,double c) {
+
+	public StatusForShortestPath(RoadLink r, double c) {
 		// TODO Auto-generated constructor stub
-		roadLink=r;
-		cost=c;
-		path=new ArrayList<String>(200);
+		roadLink = r;
+		cost = c;
+		path = new ArrayList<String>(200);
 	}
-	public StatusForShortestPath(RoadLink r,double c,List<String> p) {
+
+	public StatusForShortestPath(RoadLink r, double c, List<String> p) {
 		// TODO Auto-generated constructor stub
-		roadLink=r;
-		cost=c;
-		path=new ArrayList<String>(p);
+		roadLink = r;
+		cost = c;
+		path = new ArrayList<String>(p);
 	}
-	public void append_Status_Path_Cost(StatusForShortestPath obj){
-		if(path.get(path.size()-1).equals(obj.path.get(0))){
-			path.remove(path.size()-1);
+
+	public void append_Status_Path_Cost(StatusForShortestPath obj) {
+		if (!path.isEmpty() && !obj.path.isEmpty() && path.get(path.size() - 1).equals(obj.path.get(0))) {
+			path.remove(path.size() - 1);
 		}
 		path.addAll(obj.path);
-		roadLink=obj.roadLink;
-		cost+=obj.cost;
+		roadLink = obj.roadLink;
+		cost += obj.cost;
 	}
-	public void add_RoadLink(RoadLink obj){
-		roadLink=obj;
-		cost+=obj.length;
+
+	public void add_RoadLink(RoadLink obj) {
+		roadLink = obj;
+		cost += obj.length;
 		path.add(obj.ID);
 	}
 }
