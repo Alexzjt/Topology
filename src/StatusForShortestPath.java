@@ -34,6 +34,12 @@ public class StatusForShortestPath {
 		cost = c;
 		path = new ArrayList<String>(p);
 	}
+	
+	public StatusForShortestPath(StatusForShortestPath obj){
+		roadLink = new RoadLink(obj.roadLink);
+		cost=obj.cost;
+		path=new ArrayList<String>(obj.path);
+	}
 
 	public void append_Status_Path_Cost(StatusForShortestPath obj) {
 		if (!path.isEmpty() && !obj.path.isEmpty() && path.get(path.size() - 1).equals(obj.path.get(0))) {

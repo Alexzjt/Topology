@@ -34,4 +34,7 @@ public class Config {
 	public static double CHONGQING_G5001=180;   //重庆绕城高速的路径长度。
 	public static double TOLERANCE_SIMILARITY=0.1;   //两条路径的区别，如果小于此值，则认为相似。
 	public static String ROADLINK_EACH_DIR="D:\\zjt\\OD所有高速路链BFS\\";
+	////////////////////////////////////////////////////////////////////////
+	public static int NUMBERS_OF_ROADLINK=13771;
+	public static String OD_DIJKSTRA_DIR="D:\\zjt\\OD最短路径\\";
 }
