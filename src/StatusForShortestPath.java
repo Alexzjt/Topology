@@ -1,7 +1,5 @@
-import java.util.ArrayList;
-import java.util.List;
-
-import com.sun.corba.se.spi.ior.ObjectKey;
+import java.io.*;
+import java.util.*;
 
 public class StatusForShortestPath {
 	public RoadLink roadLink;
@@ -34,11 +32,11 @@ public class StatusForShortestPath {
 		cost = c;
 		path = new ArrayList<String>(p);
 	}
-	
-	public StatusForShortestPath(StatusForShortestPath obj){
+
+	public StatusForShortestPath(StatusForShortestPath obj) {
 		roadLink = new RoadLink(obj.roadLink);
-		cost=obj.cost;
-		path=new ArrayList<String>(obj.path);
+		cost = obj.cost;
+		path = new ArrayList<String>(obj.path);
 	}
 
 	public void append_Status_Path_Cost(StatusForShortestPath obj) {
