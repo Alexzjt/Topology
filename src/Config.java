@@ -27,13 +27,13 @@ public class Config {
 	public static String ROADLINK_HIGHWAY_ID="D:\\zjt\\路网拓扑zjt\\路网拓扑结果\\路链拓扑"+DF.format(new Date())+".csv";
 	public static String HIGHWAY_ID_LONLAT="D:\\zjt\\路网拓扑zjt\\路网拓扑结果\\高速公路ID及其经纬度"+DF.format(new Date())+".csv";
 	///////////////////////////////////////////////////////////////
-	public static String SUB_OPTIMAL_PATH_DIR="D:\\zjt\\OD寻径结果（含次优）\\";
-	public static String SHORTEST_PATH_LENGTH_IN="D:\\zjt\\路网拓扑zjt\\路网拓扑结果\\收费站最短距离20160504175825.csv";
+	public static String SUB_OPTIMAL_PATH_DIR="D:\\zjt\\OD最短路径和次短路径\\";
+	public static String SHORTEST_PATH_LENGTH_IN="D:\\zjt\\路网拓扑zjt\\路网拓扑结果\\收费站最短距离20160513174938.csv";
 	public static String ROADLINK_MIDDLE_FILE_SUB_OPT="D:\\zjt\\路网拓扑zjt\\路网拓扑结果\\路链拓扑20160510112502.csv";
 	public static double TOLERANCE_MULTIPLE=1.25;   //次优路径阈值设置为  最短路径乘以此因子。
 	public static double CHONGQING_G5001=180;   //重庆绕城高速的路径长度。
 	public static double TOLERANCE_SIMILARITY=0.1;   //两条路径的区别，如果小于此值，则认为相似。
-	public static String ROADLINK_EACH_DIR="D:\\zjt\\OD所有高速路链BFS\\";
+	public static String ROADLINK_EACH_DIR="G:\\zjt\\OD路链岔路进出口(只保存路链ID)\\";
 	////////////////////////////////////////////////////////////////////////
 	public static int NUMBERS_OF_ROADLINK=13771;
 	public static String OD_DIJKSTRA_DIR="D:\\zjt\\OD最短路径\\";
