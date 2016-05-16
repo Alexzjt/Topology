@@ -163,8 +163,11 @@ public class SubOptimalPath {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			return return_status;
 		}
-		return return_status;
+		else {
+			return null;
+		}
 	}
 
 	public static StatusForShortestPath BFS(String origin_id, String destination_id) {
