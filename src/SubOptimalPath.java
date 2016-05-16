@@ -156,8 +156,7 @@ public class SubOptimalPath {
 				BufferedReader reader=new BufferedReader(new FileReader(file));
 				String line;
 				while((line=reader.readLine())!=null){
-					String[] array_line=line.split(",");
-					return_status.add_RoadLink(id_RoadLink_hash.get(array_line[0]));
+					return_status.add_RoadLink(id_RoadLink_hash.get(line));
 				}
 				reader.close();
 			} catch (Exception e) {
