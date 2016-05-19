@@ -61,6 +61,7 @@ public class SubOptimalPath {
 					System.out.println(origin_station + "_" + destination_station);
 					if (origin_station.equals(destination_station))
 						continue;
+					int count_path=0;
 					String file_sp_path = append_file_path(Config.SUB_OPTIMAL_PATH_DIR, origin_station,
 							destination_station);
 					BufferedReader file_sp = new BufferedReader(new FileReader(file_sp_path));
@@ -75,7 +76,7 @@ public class SubOptimalPath {
 					ArrayList<ArrayList<String>> record_all_path = new ArrayList<ArrayList<String>>();
 					record_all_path.add(sp_path);
 					priorityQueue = find_Kth_Sub_Optimal_Path(priorityQueue, sp_path);
-					while (!priorityQueue.isEmpty()) {
+					while (!priorityQueue.isEmpty()&&count_path<Config.COUNT_SUB_OPT_PATH) {
 						StatusForShortestPath sub_optimal_status = priorityQueue.poll();
 						if (sub_optimal_status.cost < SE_length.get(origin_station + "_" + destination_station)
 								* Config.TOLERANCE_MULTIPLE && !compare_similarity_in_Path_List(record_all_path,sub_optimal_status.path)) {
@@ -83,6 +84,7 @@ public class SubOptimalPath {
 							identify_Status(sub_optimal_status,
 									Config.SUB_OPTIMAL_PATH_DIR + origin_station + "\\" + destination_station);
 							priorityQueue = find_Kth_Sub_Optimal_Path(priorityQueue, sub_optimal_status.path);
+							count_path++;
 						}
 					}
 				}
