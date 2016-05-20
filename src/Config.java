@@ -38,4 +38,7 @@ public class Config {
 	////////////////////////////////////////////////////////////////////////
 	public static int NUMBERS_OF_ROADLINK=13771;
 	public static String OD_DIJKSTRA_DIR="D:\\zjt\\OD最短路径\\";
+	////////////////////////////////////////////////////////////////////////
+	public static String NAVINFO_PRE="D:\\zjt\\四维图新\\level2\\level2\\";
+	public static String NAVINFO_STATION_OUTPUT="D:\\zjt\\四维图新\\收费站poiID名称经纬度所在路名\\";
 }
