@@ -106,25 +106,8 @@ public class RoadLink {
 	}
 
 	public static boolean judge_Ramp(String kind) {
-		String[] kind_array = kind.split("");
-		if (kind_array[4].equals("4") || kind_array[4].equals("5") || kind_array[4].equals("3")
-				|| kind_array[4].equals("7") || kind_array[4].equals("6") || kind_array[4].equals("a")
-				|| kind_array[4].equals("0")) {
+		if(kind.contains("000b")){
 			return true;
-		}
-		if (kind.length() > 5) {
-			if (kind_array[9].equals("4") || kind_array[9].equals("5") || kind_array[9].equals("3")
-					|| kind_array[9].equals("7") || kind_array[9].equals("6") || kind_array[9].equals("a")
-					|| kind_array[9].equals("0")) {
-				return true;
-			}
-		}
-		if (kind.length() > 10) {
-			if (kind_array[14].equals("4") || kind_array[14].equals("5") || kind_array[14].equals("3")
-					|| kind_array[14].equals("7") || kind_array[14].equals("6") || kind_array[14].equals("a")
-					|| kind_array[14].equals("0")) {
-				return true;
-			}
 		}
 		return false;
 	}
