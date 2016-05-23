@@ -125,39 +125,47 @@ public class RoadLink {
 	}
 
 	public static char judge_Road_char(String str) {
-		if (str.equals("3") || str.equals("5") || str.equals("4"))
-			return 'J';
-		else if (str.equals("6"))
+		if (str.equals("6"))
 			return 'P';
 		else if (str.equals("7"))
 			return 'F';
 		else if (str.equals("f"))
 			return 'T';
+		else if(str.equals("5"))
+			return 'I';
+		else if (str.equals("3"))
+			return 'J';
 		return 'G';
 	}
 
 	public static char judge_Road_char(String str1, String str2) {
 		char ch1 = RoadLink.judge_Road_char(str1), ch2 = RoadLink.judge_Road_char(str2);
-		if (ch1 != 'G' && ch1 != 'T')
-			return ch1;
-		if (ch2 != 'G' && ch2 != 'T')
-			return ch2;
-		if (ch1 == 'T' || ch2 == 'T')
+		if(ch1=='P'||ch2=='P')
+			return 'P';
+		if(ch1=='F'||ch2=='F')
+			return 'F';
+		if(ch1=='T'||ch2=='T')
 			return 'T';
+		if(ch1=='I'||ch2=='I')
+			return 'I';
+		if(ch1=='J'||ch2=='J')
+			return 'J';
 		return 'G';
 	}
 
 	public static char judge_Road_char(String str1, String str2, String str3) {
 		char ch1 = RoadLink.judge_Road_char(str1), ch2 = RoadLink.judge_Road_char(str2);
 		char ch3 = RoadLink.judge_Road_char(str3);
-		if (ch1 != 'G' && ch1 != 'T')
-			return ch1;
-		if (ch2 != 'G' && ch2 != 'T')
-			return ch2;
-		if (ch3 != 'G' && ch3 != 'T')
-			return ch3;
-		if (ch1 == 'T' || ch2 == 'T' || ch3 == 'T')
+		if(ch1=='P'||ch2=='P'||ch3=='P')
+			return 'P';
+		if(ch1=='F'||ch2=='F'||ch3=='F')
+			return 'F';
+		if(ch1=='T'||ch2=='T'||ch3=='T')
 			return 'T';
+		if(ch1=='I'||ch2=='I'||ch3=='I')
+			return 'I';
+		if(ch1=='J'||ch2=='J'||ch3=='J')
+			return 'J';
 		return 'G';
 	}
 
