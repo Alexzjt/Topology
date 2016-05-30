@@ -3,6 +3,7 @@ import java.util.Date;
 
 public class Config {
 	public static SimpleDateFormat DF=new SimpleDateFormat("yyyyMMddHHmmss");
+	public static SimpleDateFormat DF_TOLL=new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 	public static int SPEED_UPBOUND=250;   //最高限速约定
 	public static int SPEED_LOWBOUND=0;    //最低限速约定
 	public static String MAP_MIF="D:\\zjt\\重庆地图\\Rchongqing.mif";	   //.mif文件的存储路径
@@ -43,4 +44,7 @@ public class Config {
 	public static String NAVINFO_STATION_OUTPUT="D:\\zjt\\四维图新\\收费站poiID名称经纬度所在路名\\";
 	/////////////////////////////////////////////////////////////////////////
 	public static String OD_DIJKSTRA_DIR_SHORT="D:\\zjt\\OD最短路径按高速编号\\";
+	//////////////////////////////////////////////////////////////////////////
+	public static String TOLL_DATA="D:\\zjt\\2015年数据\\201512\\2015-12-01.csv";
+	public static String TOLL_DATA_ANALYSIS="D:\\zjt\\2015年收费数据解析\\2015-12-01.csv";
 }
