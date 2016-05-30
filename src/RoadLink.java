@@ -106,7 +106,7 @@ public class RoadLink {
 	}
 
 	public static boolean judge_Ramp(String kind) {
-		if(kind.contains("000b")){
+		if (kind.contains("000b")) {
 			return true;
 		}
 		return false;
@@ -131,7 +131,7 @@ public class RoadLink {
 			return 'F';
 		else if (str.equals("f"))
 			return 'T';
-		else if(str.equals("5"))
+		else if (str.equals("5"))
 			return 'I';
 		else if (str.equals("3"))
 			return 'J';
@@ -140,15 +140,15 @@ public class RoadLink {
 
 	public static char judge_Road_char(String str1, String str2) {
 		char ch1 = RoadLink.judge_Road_char(str1), ch2 = RoadLink.judge_Road_char(str2);
-		if(ch1=='P'||ch2=='P')
+		if (ch1 == 'P' || ch2 == 'P')
 			return 'P';
-		if(ch1=='F'||ch2=='F')
+		if (ch1 == 'F' || ch2 == 'F')
 			return 'F';
-		if(ch1=='T'||ch2=='T')
+		if (ch1 == 'T' || ch2 == 'T')
 			return 'T';
-		if(ch1=='I'||ch2=='I')
+		if (ch1 == 'I' || ch2 == 'I')
 			return 'I';
-		if(ch1=='J'||ch2=='J')
+		if (ch1 == 'J' || ch2 == 'J')
 			return 'J';
 		return 'G';
 	}
@@ -156,15 +156,15 @@ public class RoadLink {
 	public static char judge_Road_char(String str1, String str2, String str3) {
 		char ch1 = RoadLink.judge_Road_char(str1), ch2 = RoadLink.judge_Road_char(str2);
 		char ch3 = RoadLink.judge_Road_char(str3);
-		if(ch1=='P'||ch2=='P'||ch3=='P')
+		if (ch1 == 'P' || ch2 == 'P' || ch3 == 'P')
 			return 'P';
-		if(ch1=='F'||ch2=='F'||ch3=='F')
+		if (ch1 == 'F' || ch2 == 'F' || ch3 == 'F')
 			return 'F';
-		if(ch1=='T'||ch2=='T'||ch3=='T')
+		if (ch1 == 'T' || ch2 == 'T' || ch3 == 'T')
 			return 'T';
-		if(ch1=='I'||ch2=='I'||ch3=='I')
+		if (ch1 == 'I' || ch2 == 'I' || ch3 == 'I')
 			return 'I';
-		if(ch1=='J'||ch2=='J'||ch3=='J')
+		if (ch1 == 'J' || ch2 == 'J' || ch3 == 'J')
 			return 'J';
 		return 'G';
 	}
@@ -250,4 +250,10 @@ public class RoadLink {
 		return return_str.toString();
 	}
 
+	public String toString_Short() {   //这个函数返回简短版的路链性质，主要是为了突出同一条高速公路编号下的所有路链之和
+		StringBuilder return_str = new StringBuilder(ID);
+		return_str.append(",").append(length).append(",").append(highway_ID).append(",")
+				.append(lonlat_list.get(0).toString());
+		return return_str.toString();
+	}
 }
