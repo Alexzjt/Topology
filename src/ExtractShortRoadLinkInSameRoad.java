@@ -32,6 +32,8 @@ public class ExtractShortRoadLinkInSameRoad {
 							}
 						}
 					}
+					loop_roadlink.length-=Double.valueOf(line_array[3]);
+					writer.write(loop_roadlink.toString_Short() + "\r\n");
 					loop_roadlink = new RoadLink(line_array, true);
 					writer.write(loop_roadlink.toString_Short() + "\r\n");
 					reader.close();
