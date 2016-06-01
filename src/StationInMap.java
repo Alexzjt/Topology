@@ -1,7 +1,7 @@
 import java.util.List;
 
 public class StationInMap {
-	String poi_ID,name,roadlink_ID;
+	String poi_ID,name,roadlink_ID,in_out;
 	LonLat lonLat;
 	public StationInMap() {
 		// TODO Auto-generated constructor stub
@@ -10,11 +10,12 @@ public class StationInMap {
 		// TODO Auto-generated constructor stub
 		this.poi_ID=poi_ID;
 		this.name=name;
+		this.in_out=null;
 	}
 	@Override
 	public String toString() {
 		StringBuilder str=new StringBuilder(poi_ID);
-		str.append(",").append(name).append(",").append(lonLat.toString());
+		str.append(",").append(name).append(",").append(lonLat.toString()).append(",").append(in_out);
 		return str.toString();
 	}
 	public static String listAddSeparator(List<String> list){

@@ -37,6 +37,51 @@ public class ExtractStationFromMap {
 						StationInMap loop_station = poi_StationInMap_hash.get(line_array[8]);
 						loop_station.lonLat = new LonLat(line_array[6], line_array[7]);
 						loop_station.roadlink_ID = line_array[13];
+						RoadLink station_RoadLink = id_Roadlink.get(loop_station.roadlink_ID);
+						if(station_RoadLink!=null&&!station_RoadLink.isRamp){
+							loop_station.in_out="Ö÷";
+						}
+						else {
+							ArrayDeque<RoadLink> queue = new ArrayDeque<RoadLink>();
+							ArrayList<String> history = new ArrayList<String>();
+							if (id_Roadlink != null && id_Roadlink.containsKey(loop_station.roadlink_ID)) {
+								queue.add(id_Roadlink.get(loop_station.roadlink_ID));
+								while (!queue.isEmpty()) {
+									RoadLink loop_roadlink = queue.poll();
+									history.add(loop_roadlink.ID);
+									if (!loop_roadlink.isRamp) {
+										loop_station.in_out="Èë";
+										break;
+									}
+									if (loop_roadlink.next_ID != null) {
+										for (String str_id : loop_roadlink.next_ID) {
+											RoadLink temp_RoadLink_judge = id_Roadlink.get(str_id);
+											if (temp_RoadLink_judge != null && !history.contains(str_id))
+												queue.add(temp_RoadLink_judge);
+										}
+									}
+								}
+								if(queue.isEmpty()){
+									history.clear();
+									queue.add(id_Roadlink.get(loop_station.roadlink_ID));
+									while (!queue.isEmpty()) {
+										RoadLink loop_roadlink = queue.poll();
+										history.add(loop_roadlink.ID);
+										if (!loop_roadlink.isRamp) {
+											loop_station.in_out="³ö";
+											break;
+										}
+										if (loop_roadlink.pre_ID != null) {
+											for (String str_id : loop_roadlink.pre_ID) {
+												RoadLink temp_RoadLink_judge = id_Roadlink.get(str_id);
+												if (temp_RoadLink_judge != null && !history.contains(str_id))
+													queue.add(temp_RoadLink_judge);
+											}
+										}
+									}
+								}
+							}
+						}
 						poi_StationInMap_hash.put(loop_station.poi_ID, loop_station);
 						// roadlink_id_array.add(line_array[13]);
 					}
