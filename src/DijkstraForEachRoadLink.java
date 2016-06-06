@@ -14,12 +14,35 @@ public class DijkstraForEachRoadLink {
 				String[] array_line = line.split(",");
 				RoadLink loop_roadlink = new RoadLink(array_line, true);
 				id_RoadLink_hash.put(loop_roadlink.ID, loop_roadlink);
-				if(loop_roadlink.next_ID!=null&&loop_roadlink.next_ID.size()>1)
-					roadlink_out_ID_List.addAll(loop_roadlink.next_ID);
-				if(loop_roadlink.pre_ID!=null&&loop_roadlink.pre_ID.size()>1)
-					roadLink_in_ID_List.add(loop_roadlink.ID);
 			}
 			file_roadlink.close();
+			for(Iterator<RoadLink> iterator=id_RoadLink_hash.values().iterator();iterator.hasNext();){
+				RoadLink loop_roadlink=iterator.next();
+				if(loop_roadlink.next_ID!=null&&loop_roadlink.next_ID.size()>1){
+					boolean judge=true;
+					for(String next_RoadLink_id : loop_roadlink.next_ID){
+						if(!id_RoadLink_hash.get(next_RoadLink_id).is_MainLine()){
+							judge=false;
+							break;
+						}
+					}
+					if(judge)
+					roadlink_out_ID_List.addAll(loop_roadlink.next_ID);
+				}
+					
+				if(loop_roadlink.pre_ID!=null&&loop_roadlink.pre_ID.size()>1){
+					boolean judge=true;
+					for(String pre_RoadLink_id : loop_roadlink.pre_ID){
+						if(!id_RoadLink_hash.get(pre_RoadLink_id).is_MainLine()){
+							judge=false;
+							break;
+						}
+					}
+					if(judge)
+					roadLink_in_ID_List.add(loop_roadlink.ID);
+				}
+					
+			}
 			for(int i=0;i<roadlink_out_ID_List.size();i++){
 				HashMap<String, StatusForShortestPath> hash=dijkstra(roadlink_out_ID_List.get(i));
 				for(int i1=0;i1<roadLink_in_ID_List.size();i1++){

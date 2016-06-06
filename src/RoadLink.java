@@ -256,4 +256,11 @@ public class RoadLink {
 				.append(lonlat_list.get(0).toString());
 		return return_str.toString();
 	}
+	
+	public boolean is_MainLine(){
+		//此函数的意思是，是否是干线。此处定义干线为：G、T、J。其余的停车区P，收费站I，服务区F为支线。
+		if(road_attribute=='P'||road_attribute=='I'||road_attribute=='F')
+			return false;
+		return true;
+	}
 }

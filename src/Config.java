@@ -34,7 +34,7 @@ public class Config {
 	public static double TOLERANCE_MULTIPLE=1.2;   //次优路径阈值设置为  最短路径乘以此因子。
 	public static double CHONGQING_G5001=180;   //重庆绕城高速的路径长度。
 	public static double TOLERANCE_SIMILARITY=0.1;   //两条路径的区别，如果小于此值，则认为相似。
-	public static int COUNT_SUB_OPT_PATH=10;         //如果次优路径的数量超过此数目，只求最短的前xxx条
+	public static int COUNT_SUB_OPT_PATH=5;         //如果次优路径的数量超过此数目，只求最短的前xxx条
 	public static String ROADLINK_EACH_DIR="G:\\zjt\\OD路链岔路进出口(只保存路链ID)\\";
 	////////////////////////////////////////////////////////////////////////
 	public static int NUMBERS_OF_ROADLINK=13771;
