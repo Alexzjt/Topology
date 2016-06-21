@@ -1,3 +1,4 @@
+import java.nio.channels.ScatteringByteChannel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -47,4 +48,5 @@ public class Config {
 	//////////////////////////////////////////////////////////////////////////
 	public static String TOLL_DATA="D:\\zjt\\2015年数据\\201512\\2015-12-01.csv";
 	public static String TOLL_DATA_ANALYSIS="D:\\zjt\\2015年收费数据解析\\2015-12-01.csv";
+	public static String ROADLINK_TOPOLOGY_29="D:\\zjt\\四维图新\\29省路网拓扑\\";
 }
