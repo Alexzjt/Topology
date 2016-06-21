@@ -23,7 +23,7 @@ public class ExtractStationFromMap {
 				String line = null;
 				while ((line = pname.readLine()) != null) {
 					String[] line_array = line.split("\",\"|\"");
-					if (line_array[3].endsWith("收费站")) {
+					if (line_array[3].endsWith("收费站")) {     //以收费站结尾
 						poi_StationInMap_hash.put(line_array[1], new StationInMap(line_array[1], line_array[3])); // 查找到了是收费站的POI。一一对应。
 						// poi_station_array.add(line_array[1]);
 					}

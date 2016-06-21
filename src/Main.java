@@ -273,7 +273,7 @@ public class Main {
 			String s;
 			while ((s = file_mid.readLine()) != null) {// 读MID文件
 				line++;
-				String[] s_array = s.split("\",\"|\"");
+				String[] s_array = s.split("\",\"|\"");   //用正则分隔这行
 				// 判断这一行是高速公路，即前两个字段是00
 				if (s_array[4].charAt(0) == '0' && s_array[4].charAt(1) == '0') {
 					highway_roadlink_id.add(s_array[2]);
