@@ -2,13 +2,14 @@ import java.io.*;
 import java.util.*;
 
 import com.sun.xml.internal.bind.v2.runtime.Name;
+
 //
 public class SubOptimalPath {
 	static HashMap<String, RoadLink> id_RoadLink_hash;
 	static HashMap<String, List<String>> stationID_RoadLinkID_hash;
 	static HashMap<String, Double> SE_length;
 	static List<String> stationID;
-	static ArrayList<List<String>> used_out_in_list=new ArrayList<List<String>>();
+	static ArrayList<List<String>> used_out_in_list = new ArrayList<List<String>>();
 	static Comparator<StatusForShortestPath> order = new Comparator<StatusForShortestPath>() {
 		public int compare(StatusForShortestPath obj1, StatusForShortestPath obj2) {
 			if (obj1.cost < obj2.cost)
@@ -56,35 +57,40 @@ public class SubOptimalPath {
 			}
 			file_roadlink.close();
 			file_station_SP.close();
+			//BFSforShortestPath.newDir(stationID, Config.SUB_OPTIMAL_PATH_DIR);
 			for (String origin_station : stationID) {
 				for (String destination_station : stationID) {
 					System.out.println(origin_station + "_" + destination_station);
 					if (origin_station.equals(destination_station))
 						continue;
-					int count_path=0;
-					String file_sp_path = append_file_path(Config.SUB_OPTIMAL_PATH_DIR, origin_station,
+					int count_path = 0;
+					List<String> file_sp_path_list = append_file_path_list(Config.OD_DIJKSTRA_DIR, origin_station,
 							destination_station);
-					BufferedReader file_sp = new BufferedReader(new FileReader(file_sp_path));
-					used_out_in_list.clear();
-					Queue<StatusForShortestPath> priorityQueue = new PriorityQueue<StatusForShortestPath>(10, order);
-					ArrayList<String> sp_path = new ArrayList<String>(100);
-					while ((line = file_sp.readLine()) != null) {
-						String[] array_line = line.split(",");
-						sp_path.add(array_line[0]);
-					}
-					file_sp.close();
-					ArrayList<ArrayList<String>> record_all_path = new ArrayList<ArrayList<String>>();
-					record_all_path.add(sp_path);
-					priorityQueue = find_Kth_Sub_Optimal_Path(priorityQueue, sp_path);
-					while (!priorityQueue.isEmpty()&&count_path<Config.COUNT_SUB_OPT_PATH) {
-						StatusForShortestPath sub_optimal_status = priorityQueue.poll();
-						if (sub_optimal_status.cost < SE_length.get(origin_station + "_" + destination_station)
-								* Config.TOLERANCE_MULTIPLE && !compare_similarity_in_Path_List(record_all_path,sub_optimal_status.path)) {
-							record_all_path.add(sub_optimal_status.path);
-							identify_Status(sub_optimal_status,
-									Config.SUB_OPTIMAL_PATH_DIR + origin_station + "\\" + destination_station);
-							priorityQueue = find_Kth_Sub_Optimal_Path(priorityQueue, sub_optimal_status.path);
-							count_path++;
+					for (String file_sp_path : file_sp_path_list) {
+						BufferedReader file_sp = new BufferedReader(new FileReader(file_sp_path));
+						used_out_in_list.clear();
+						Queue<StatusForShortestPath> priorityQueue = new PriorityQueue<StatusForShortestPath>(10,
+								order);
+						ArrayList<String> sp_path = new ArrayList<String>(100);
+						while ((line = file_sp.readLine()) != null) {
+							String[] array_line = line.split(",");
+							sp_path.add(array_line[0]);
+						}
+						file_sp.close();
+						ArrayList<ArrayList<String>> record_all_path = new ArrayList<ArrayList<String>>();
+						record_all_path.add(sp_path);
+						priorityQueue = find_Kth_Sub_Optimal_Path(priorityQueue, sp_path);
+						while (!priorityQueue.isEmpty() && count_path < Config.COUNT_SUB_OPT_PATH) {
+							StatusForShortestPath sub_optimal_status = priorityQueue.poll();
+							if (sub_optimal_status.cost < SE_length.get(origin_station + "_" + destination_station)
+									* Config.TOLERANCE_MULTIPLE
+									&& !compare_similarity_in_Path_List(record_all_path, sub_optimal_status.path)) {
+								record_all_path.add(sub_optimal_status.path);
+								identify_Status(sub_optimal_status,
+										Config.SUB_OPTIMAL_PATH_DIR + origin_station + "\\" + destination_station);
+								priorityQueue = find_Kth_Sub_Optimal_Path(priorityQueue, sub_optimal_status.path);
+								count_path++;
+							}
 						}
 					}
 				}
@@ -94,22 +100,22 @@ public class SubOptimalPath {
 			e.printStackTrace();
 		}
 	}
-	
-	public static boolean compare_similarity(ArrayList<String> list1,ArrayList<String> list2){
-		//此函数是为了比较两个路径是否相似，因为在前一版本中，出现了在服务区这种地方，匝道特别多，排列组合下来之后产生了特别多的相似次优路径。
-		//本函数是比较两个List是否相似。List1为原始路径，List2为待比较路径，顺序不能用错。
-		int length1=list1.size(),length2=list2.size();
-		ArrayList<String> l1=new ArrayList<String>(list1),l2=new ArrayList<String>(list2);
-		for(String str : l1){
+
+	public static boolean compare_similarity(ArrayList<String> list1, ArrayList<String> list2) {
+		// 此函数是为了比较两个路径是否相似，因为在前一版本中，出现了在服务区这种地方，匝道特别多，排列组合下来之后产生了特别多的相似次优路径。
+		// 本函数是比较两个List是否相似。List1为原始路径，List2为待比较路径，顺序不能用错。
+		int length1 = list1.size(), length2 = list2.size();
+		ArrayList<String> l1 = new ArrayList<String>(list1), l2 = new ArrayList<String>(list2);
+		for (String str : l1) {
 			l2.remove(str);
 		}
-		return (double)l2.size()/(double)length2<=Config.TOLERANCE_SIMILARITY;
+		return (double) l2.size() / (double) length2 <= Config.TOLERANCE_SIMILARITY;
 	}
-	
-	public static boolean compare_similarity_in_Path_List(ArrayList<ArrayList<String>> list1,ArrayList<String> list2){
-		//和上面那个函数不一样的地方在于，这个函数是在list1中查找是否有路径和list2相似。即List1是路径的集合，list2是路径。
-		for(ArrayList<String> l1 : list1){
-			if(compare_similarity(l1, list2)){
+
+	public static boolean compare_similarity_in_Path_List(ArrayList<ArrayList<String>> list1, ArrayList<String> list2) {
+		// 和上面那个函数不一样的地方在于，这个函数是在list1中查找是否有路径和list2相似。即List1是路径的集合，list2是路径。
+		for (ArrayList<String> l1 : list1) {
+			if (compare_similarity(l1, list2)) {
 				return true;
 			}
 		}
@@ -125,10 +131,11 @@ public class SubOptimalPath {
 					RoadLink in_Roadlink = id_RoadLink_hash.get(sp_path.get(j));
 					if (in_Roadlink.pre_ID != null && in_Roadlink.pre_ID.size() > 1) { // 说明可以从此进入最短路径中
 						for (String out_ID : out_Roadlink.next_ID) {
-							List<String> out_in_pair=Arrays.asList(out_ID,sp_path.get(j));
-							if (!out_ID.equals(sp_path.get(i + 1))&&!used_out_in_list.contains(out_in_pair)) { // 这个出口必须不能和最短路径走一条路
+							List<String> out_in_pair = Arrays.asList(out_ID, sp_path.get(j));
+							if (!out_ID.equals(sp_path.get(i + 1)) && !used_out_in_list.contains(out_in_pair)) { // 这个出口必须不能和最短路径走一条路
 								used_out_in_list.add(out_in_pair);
-								StatusForShortestPath mid_status = find_od_RoadLink_path(Config.ROADLINK_EACH_DIR,out_ID, sp_path.get(j));
+								StatusForShortestPath mid_status = find_od_RoadLink_path(Config.ROADLINK_EACH_DIR,
+										out_ID, sp_path.get(j));
 								if (mid_status != null) {
 									StatusForShortestPath record_status = new StatusForShortestPath();
 									for (int i1 = 0; i1 <= i; i1++) {
@@ -148,16 +155,15 @@ public class SubOptimalPath {
 		}
 		return priorityQueue;
 	}
-	
-	
-	public static StatusForShortestPath find_od_RoadLink_path(String dir, String origin, String destination){
-		String file=append_file_path(dir, origin, destination);
-		StatusForShortestPath return_status=new StatusForShortestPath();
-		if(file!=null){
+
+	public static StatusForShortestPath find_od_RoadLink_path(String dir, String origin, String destination) {
+		String file = append_file_path(dir, origin, destination);
+		StatusForShortestPath return_status = new StatusForShortestPath();
+		if (file != null) {
 			try {
-				BufferedReader reader=new BufferedReader(new FileReader(file));
+				BufferedReader reader = new BufferedReader(new FileReader(file));
 				String line;
-				while((line=reader.readLine())!=null){
+				while ((line = reader.readLine()) != null) {
 					return_status.add_RoadLink(id_RoadLink_hash.get(line));
 				}
 				reader.close();
@@ -166,8 +172,7 @@ public class SubOptimalPath {
 				e.printStackTrace();
 			}
 			return return_status;
-		}
-		else {
+		} else {
 			return null;
 		}
 	}
@@ -229,13 +234,30 @@ public class SubOptimalPath {
 		if (path.isDirectory()) {
 			String[] s = path.list();
 			if (s.length != 0) {
-				for(String name : s){
-					if(name.contains("csv"))
+				for (String name : s) {
+					if (name.contains("csv"))
 						return str.append("\\").append(name).toString();
 				}
 			}
 		}
 		return null;
+	}
+
+	public static List<String> append_file_path_list(String dir, String origin, String destination) {
+		List<String> file_list = new ArrayList<String>();
+		StringBuilder str = new StringBuilder(dir);
+		str.append(origin).append("\\").append(destination);
+		File path = new File(str.toString());
+		if (path.isDirectory()) {
+			String[] s = path.list();
+			if (s.length != 0) {
+				for (String name : s) {
+					if (name.contains("csv"))
+						file_list.add(str.toString()+"\\"+name);
+				}
+			}
+		}
+		return file_list;
 	}
 
 	public static void identify_Status(StatusForShortestPath status, String path) {

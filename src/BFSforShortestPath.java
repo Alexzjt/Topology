@@ -30,6 +30,7 @@ public class BFSforShortestPath {
 					}
 				}
 			}
+			file_roadlink.close();
 			newDir(stationID,Config.SHORTEST_PATH_DIR);
 			for (Iterator<String> iterator = stationID_RoadLinkID_hash.keySet().iterator(); iterator.hasNext();) {
 				String loop_station = iterator.next();
@@ -96,7 +97,6 @@ public class BFSforShortestPath {
 					file_SPResult.write(loop_station + "," + loop_station1 + "," + String.valueOf(minCost)+"\r\n");
 				}
 			}
-			file_roadlink.close();
 			file_SPResult.close();
 		} catch (Exception e) {
 			// TODO: handle exception

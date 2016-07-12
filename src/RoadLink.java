@@ -241,7 +241,7 @@ public class RoadLink {
 		return_str.append(",").append(next_ID_list.toString()).append(",").append(pre_ID_list.toString()).append(",")
 				.append(String.valueOf(length)).append(",").append(String.valueOf(isRamp)).append(",")
 				.append(String.valueOf(road_attribute)).append(",").append(String.valueOf(highway_ID)).append(",")
-				.append(lonlat_list.get(0).toString()).append(",").append(String.valueOf(lane)).append(",")
+				.append(getFirstLonLat().toString()).append(",").append(String.valueOf(lane)).append(",")
 				.append(String.valueOf(speed_lowbound)).append(",").append(String.valueOf(speed_upbound)).append(",")
 				.append(String.valueOf(line)).append(",").append(String.valueOf(tachometer)).append(",")
 				.append(String.valueOf(tachometer_stake)).append(",").append(String.valueOf(station)).append(",")
@@ -262,5 +262,15 @@ public class RoadLink {
 		if(road_attribute=='P'||road_attribute=='I'||road_attribute=='F')
 			return false;
 		return true;
+	}
+	
+	public LonLat getFirstLonLat(){
+		if(direction==3){
+			int temp=lonlat_list.size();
+			return lonlat_list.get(temp-1);
+		}
+		else{
+			return lonlat_list.get(0);
+		}
 	}
 }

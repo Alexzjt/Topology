@@ -34,28 +34,34 @@ public class DijkstraStation {
 				}
 			}
 			file_roadlink.close();
-			BFSforShortestPath.newDir(stationID,Config.OD_DIJKSTRA_DIR);
-			BufferedWriter writer=new BufferedWriter(new FileWriter(Config.STATION_SHORTEST_PATH_LENGTH));
-			for(String origin_station_ID : stationID){
+			BFSforShortestPath.newDir(stationID, Config.OD_DIJKSTRA_DIR);
+			BufferedWriter writer = new BufferedWriter(new FileWriter(Config.STATION_SHORTEST_PATH_LENGTH));
+			for (String origin_station_ID : stationID) {
 				System.out.println(origin_station_ID);
-				ArrayList<HashMap<String, StatusForShortestPath>> arrayList=new ArrayList<HashMap<String, StatusForShortestPath>>();
-				for(String station_roadlink_ID : stationID_RoadLinkID_hash.get(origin_station_ID)){
+				ArrayList<HashMap<String, StatusForShortestPath>> arrayList = new ArrayList<HashMap<String, StatusForShortestPath>>();
+				for (String station_roadlink_ID : stationID_RoadLinkID_hash.get(origin_station_ID)) {
 					arrayList.add(dijkstra(station_roadlink_ID));
 				}
-				for(String destination_station_ID : stationID){
-					if(origin_station_ID.equals(destination_station_ID)){
-						writer.write(origin_station_ID+","+destination_station_ID+","+0+"\r\n");
+				for (String destination_station_ID : stationID) {
+					if (origin_station_ID.equals(destination_station_ID)) {
+						writer.write(origin_station_ID + "," + destination_station_ID + "," + 0 + "\r\n");
 						continue;
 					}
-					StatusForShortestPath min_Status=null;
-					for(String station_roadlink_ID : stationID_RoadLinkID_hash.get(destination_station_ID)){
-						for(HashMap<String, StatusForShortestPath> hash : arrayList){
-							if(min_Status==null||(hash.containsKey(station_roadlink_ID)&&hash.get(station_roadlink_ID).cost<min_Status.cost))
-								min_Status=hash.get(station_roadlink_ID);
+					StatusForShortestPath min_Status = null;
+					for (String station_roadlink_ID : stationID_RoadLinkID_hash.get(destination_station_ID)) {
+						for (HashMap<String, StatusForShortestPath> hash : arrayList) {
+							if (hash.containsKey(station_roadlink_ID))
+								to_dir_dir_File(Config.OD_DIJKSTRA_DIR, origin_station_ID, destination_station_ID,
+										hash.get(station_roadlink_ID));
+							if (min_Status == null || (hash.containsKey(station_roadlink_ID)
+									&& hash.get(station_roadlink_ID).cost < min_Status.cost))
+								min_Status = hash.get(station_roadlink_ID);
 						}
 					}
-					to_dir_dir_File(Config.OD_DIJKSTRA_DIR,origin_station_ID,destination_station_ID, min_Status);
-					writer.write(origin_station_ID+","+destination_station_ID+","+min_Status.cost+"\r\n");
+					String min_cost="null";
+					if(min_Status!=null)
+						min_cost=String.valueOf(min_Status.cost);
+					writer.write(origin_station_ID + "," + destination_station_ID + "," + min_cost + "\r\n");
 				}
 			}
 			writer.close();
@@ -63,7 +69,6 @@ public class DijkstraStation {
 			e.printStackTrace();
 		}
 	}
-	
 
 	public static HashMap<String, StatusForShortestPath> dijkstra(String roadlink_ID) {
 		HashMap<String, StatusForShortestPath> id_Status = new HashMap<String, StatusForShortestPath>(
@@ -76,28 +81,30 @@ public class DijkstraStation {
 		while (!priorityQueue.isEmpty()) {
 			StatusForShortestPath loop_Status = priorityQueue.poll();
 			id_Status.put(loop_Status.roadLink.ID, loop_Status);
-			if(loop_Status.roadLink.next_ID==null)
+			if (loop_Status.roadLink.next_ID == null)
 				continue;
 			for (String str : loop_Status.roadLink.next_ID) {
 				RoadLink loop_RoadLink = id_RoadLink_hash.get(str);
-				if ((!id_Status.containsKey(str))||(id_Status.containsKey(str) && id_Status.get(str).cost > loop_Status.cost + loop_RoadLink.length)) {
+				if ((!id_Status.containsKey(str)) || (id_Status.containsKey(str)
+						&& id_Status.get(str).cost > loop_Status.cost + loop_RoadLink.length)) {
 					StatusForShortestPath next_Status = new StatusForShortestPath(loop_Status);
 					next_Status.add_RoadLink(loop_RoadLink);
-					//id_Status.put(str, next_Status);
+					// id_Status.put(str, next_Status);
 					priorityQueue.add(next_Status);
 				}
 			}
 		}
 		return id_Status;
 	}
-	
-	public static void map_toFile(String origin_Roadlink_ID,HashMap<String, StatusForShortestPath> id_Status){
-		for(Iterator<StatusForShortestPath> iterator=id_Status.values().iterator();iterator.hasNext();){
-			StatusForShortestPath loop_status=iterator.next();
+
+	public static void map_toFile(String origin_Roadlink_ID, HashMap<String, StatusForShortestPath> id_Status) {
+		for (Iterator<StatusForShortestPath> iterator = id_Status.values().iterator(); iterator.hasNext();) {
+			StatusForShortestPath loop_status = iterator.next();
 			try {
-				BufferedWriter writer=new BufferedWriter(new FileWriter(Config.OD_DIJKSTRA_DIR+loop_status.roadLink.ID+"_"+(int)loop_status.cost+"_"+(Config.water++)+".csv"));
-				for(String string : loop_status.path){
-					writer.write(id_RoadLink_hash.get(string).toString()+"\r\n");
+				BufferedWriter writer = new BufferedWriter(new FileWriter(Config.OD_DIJKSTRA_DIR
+						+ loop_status.roadLink.ID + "_" + (int) loop_status.cost + "_" + (Config.water++) + ".csv"));
+				for (String string : loop_status.path) {
+					writer.write(id_RoadLink_hash.get(string).toString() + "\r\n");
 				}
 				writer.close();
 			} catch (Exception e) {
@@ -106,22 +113,22 @@ public class DijkstraStation {
 			}
 		}
 	}
-	
 
-	public static void to_dir_dir_File(String file_path, String origin, String destination, StatusForShortestPath status) {
+	public static void to_dir_dir_File(String file_path, String origin, String destination,
+			StatusForShortestPath status) {
 		try {
 			StringBuilder str = new StringBuilder(file_path);
-			str.append(origin).append("\\").append(destination).append("\\").append((int)status.cost).append("_")
+			str.append(origin).append("\\").append(destination).append("\\").append((int) status.cost).append("_")
 					.append(Config.water++).append(".csv");
 			BufferedWriter writer = new BufferedWriter(new FileWriter(str.toString()));
-			for(String string : status.path){
-				writer.write(id_RoadLink_hash.get(string).toString()+"\r\n");
+			for (String string : status.path) {
+				writer.write(id_RoadLink_hash.get(string).toString() + "\r\n");
 			}
 			writer.close();
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-			System.out.println(origin+"	"+destination+"	");
+			System.out.println(origin + "	" + destination + "	");
 		}
 	}
 }

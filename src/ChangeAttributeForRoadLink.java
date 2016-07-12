@@ -17,8 +17,9 @@ public class ChangeAttributeForRoadLink {
 			BufferedWriter writer=new BufferedWriter(new FileWriter(Config.ROADLINK_HIGHWAY_ID));
 			for(Iterator<RoadLink> iterator=id_RoadLink_old.values().iterator();iterator.hasNext();){
 				RoadLink loop_roadLink=iterator.next();
-				loop_roadLink.road_attribute=id_RoadLink_new.get(loop_roadLink.ID).road_attribute;
-				loop_roadLink.isRamp=id_RoadLink_new.get(loop_roadLink.ID).isRamp;
+//				loop_roadLink.road_attribute=id_RoadLink_new.get(loop_roadLink.ID).road_attribute;
+//				loop_roadLink.isRamp=id_RoadLink_new.get(loop_roadLink.ID).isRamp;
+				loop_roadLink.lonlat_list=id_RoadLink_new.get(loop_roadLink.ID).lonlat_list;
 				writer.write(loop_roadLink.toString()+"\r\n");
 			}
 			writer.close();
