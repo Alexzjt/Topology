@@ -20,8 +20,13 @@ public class ChangeAttributeForRoadLink {
 //				loop_roadLink.road_attribute=id_RoadLink_new.get(loop_roadLink.ID).road_attribute;
 //				loop_roadLink.isRamp=id_RoadLink_new.get(loop_roadLink.ID).isRamp;
 				loop_roadLink.lonlat_list=id_RoadLink_new.get(loop_roadLink.ID).lonlat_list;
+				loop_roadLink.direction=id_RoadLink_new.get(loop_roadLink.ID).direction;
 				writer.write(loop_roadLink.toString()+"\r\n");
 			}
+//			for(Iterator<RoadLink> iterator=id_RoadLink_new.values().iterator();iterator.hasNext();){
+//				RoadLink loop_roadLink=iterator.next();
+//				writer.write(loop_roadLink.toString()+"\r\n");
+//			}
 			writer.close();
 		}
 		catch(Exception e){
