@@ -1,8 +1,9 @@
+package dao;
 import java.util.List;
 
 public class StationInMap {
-	String poi_ID,name,roadlink_ID,in_out;
-	LonLat lonLat;
+	public String poi_ID,name,roadlink_ID,in_out;
+	public LonLat lonLat;
 	public StationInMap() {
 		// TODO Auto-generated constructor stub
 	}

@@ -1,5 +1,8 @@
+package generateTopology;
 import java.io.*;
 import java.util.*;
+
+import dao.RoadLink;
 
 public class MergeTopology {
 	public static void main(String[] args) {

@@ -1,8 +1,12 @@
+package dao;
+import com.sun.org.apache.xml.internal.resolver.helpers.PublicId;
+
 import sun.security.action.GetBooleanAction;
+import util.Config;
 
 public class LonLat {
 	public double longitude,latitude;
-	LonLat(String str1,String str2){
+	public LonLat(String str1,String str2){
 		if(str1.equals("null"))
 			longitude=0;
 		else
@@ -12,11 +16,11 @@ public class LonLat {
 		else
 			latitude=Double.valueOf(str2);
 	}
-	LonLat(double num1,double num2){
+	public LonLat(double num1,double num2){
 		longitude=num1;
 		latitude=num2;
 	}
-	LonLat(String str){
+	public LonLat(String str){
 		String[] array=str.split(" ");
 		longitude=Double.valueOf(array[0]);
 		latitude=Double.valueOf(array[1]);

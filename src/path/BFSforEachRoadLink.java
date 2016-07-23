@@ -1,6 +1,11 @@
+package path;
 import java.io.*;
 import java.util.*;
-public class DijkstraForEachRoadLink {
+
+import dao.RoadLink;
+import dao.StatusForShortestPath;
+import util.Config;
+public class BFSforEachRoadLink {
 	static HashMap<String, RoadLink> id_RoadLink_hash;
 	static List<String> roadlink_out_ID_List,roadLink_in_ID_List;
 	public static void main(String[] args){
@@ -14,41 +19,20 @@ public class DijkstraForEachRoadLink {
 				String[] array_line = line.split(",");
 				RoadLink loop_roadlink = new RoadLink(array_line, true);
 				id_RoadLink_hash.put(loop_roadlink.ID, loop_roadlink);
+				if(loop_roadlink.next_ID!=null&&loop_roadlink.next_ID.size()>1)
+					roadlink_out_ID_List.addAll(loop_roadlink.next_ID);
+				if(loop_roadlink.pre_ID!=null&&loop_roadlink.pre_ID.size()>1)
+					roadLink_in_ID_List.add(loop_roadlink.ID);
 			}
 			file_roadlink.close();
-			for(Iterator<RoadLink> iterator=id_RoadLink_hash.values().iterator();iterator.hasNext();){
-				RoadLink loop_roadlink=iterator.next();
-				if(loop_roadlink.next_ID!=null&&loop_roadlink.next_ID.size()>1){
-					boolean judge=true;
-					for(String next_RoadLink_id : loop_roadlink.next_ID){
-						if(!id_RoadLink_hash.get(next_RoadLink_id).is_MainLine()){
-							judge=false;
-							break;
-						}
-					}
-					if(judge)
-					roadlink_out_ID_List.addAll(loop_roadlink.next_ID);
-				}
-					
-				if(loop_roadlink.pre_ID!=null&&loop_roadlink.pre_ID.size()>1){
-					boolean judge=true;
-					for(String pre_RoadLink_id : loop_roadlink.pre_ID){
-						if(!id_RoadLink_hash.get(pre_RoadLink_id).is_MainLine()){
-							judge=false;
-							break;
-						}
-					}
-					if(judge)
-					roadLink_in_ID_List.add(loop_roadlink.ID);
-				}
-					
-			}
 			for(int i=0;i<roadlink_out_ID_List.size();i++){
-				HashMap<String, StatusForShortestPath> hash=dijkstra(roadlink_out_ID_List.get(i));
 				for(int i1=0;i1<roadLink_in_ID_List.size();i1++){
-					if(roadlink_out_ID_List.get(i).equals(roadLink_in_ID_List.get(i1)))
+					File loop_file=new File(Config.ROADLINK_EACH_DIR+roadlink_out_ID_List.get(i)+"\\"+roadLink_in_ID_List.get(i1));
+					if(!loop_file.exists())
+						loop_file.mkdirs();
+					if(i==i1)
 						continue;
-					StatusForShortestPath result=hash.get(roadLink_in_ID_List.get(i1));
+					StatusForShortestPath result=BFS(roadlink_out_ID_List.get(i),roadLink_in_ID_List.get(i1));
 					if(result!=null){
 						identify_Status(result,Config.ROADLINK_EACH_DIR+roadlink_out_ID_List.get(i)+"\\"+roadLink_in_ID_List.get(i1));
 					}
@@ -59,33 +43,6 @@ public class DijkstraForEachRoadLink {
 			e.printStackTrace();
 		}
 	}
-	
-	public static HashMap<String, StatusForShortestPath> dijkstra(String roadlink_ID) {
-		HashMap<String, StatusForShortestPath> id_Status = new HashMap<String, StatusForShortestPath>(
-				Config.NUMBERS_OF_ROADLINK / 2);
-		Queue<StatusForShortestPath> priorityQueue = new PriorityQueue<StatusForShortestPath>(10, SubOptimalPath.order);
-		List<String> init_path = new ArrayList<String>(200);
-		init_path.add(roadlink_ID);
-		priorityQueue.add(new StatusForShortestPath(id_RoadLink_hash.get(roadlink_ID),
-				id_RoadLink_hash.get(roadlink_ID).length, init_path));
-		while (!priorityQueue.isEmpty()) {
-			StatusForShortestPath loop_Status = priorityQueue.poll();
-			id_Status.put(loop_Status.roadLink.ID, loop_Status);
-			if(loop_Status.roadLink.next_ID==null)
-				continue;
-			for (String str : loop_Status.roadLink.next_ID) {
-				RoadLink loop_RoadLink = id_RoadLink_hash.get(str);
-				if ((!id_Status.containsKey(str))||(id_Status.containsKey(str) && id_Status.get(str).cost > loop_Status.cost + loop_RoadLink.length)) {
-					StatusForShortestPath next_Status = new StatusForShortestPath(loop_Status);
-					next_Status.add_RoadLink(loop_RoadLink);
-					//id_Status.put(str, next_Status);
-					priorityQueue.add(next_Status);
-				}
-			}
-		}
-		return id_Status;
-	}
-	
 	public static StatusForShortestPath BFS(String origin_id, String destination_id) {
 		double minCost = 0;
 		// List<String> minCostPath = new ArrayList<String>(200);
@@ -149,13 +106,10 @@ public class DijkstraForEachRoadLink {
 	
 	public static void identify_Status(StatusForShortestPath status, String path) {
 		try {
-			File loop_file=new File(path);
-			if(!loop_file.exists())
-				loop_file.mkdirs();
 			BufferedWriter file = new BufferedWriter(
 					new FileWriter(path + "\\" + (int) status.cost + "_" + (Config.water++) + ".csv"));
 			for (String str : status.path) {
-				file.write(str + "\r\n");
+				file.write(id_RoadLink_hash.get(str).toString() + "\r\n");
 			}
 			file.close();
 		} catch (Exception e) {

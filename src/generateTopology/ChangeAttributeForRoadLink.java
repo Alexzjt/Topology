@@ -1,5 +1,9 @@
+package generateTopology;
 import java.io.*;
 import java.util.*;
+
+import dao.RoadLink;
+import util.Config;
 
 public class ChangeAttributeForRoadLink {
 	public static void main(String[] args){

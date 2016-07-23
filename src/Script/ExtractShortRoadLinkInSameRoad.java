@@ -1,4 +1,8 @@
+package Script;
 import java.io.*;
+
+import dao.RoadLink;
+import util.Config;
 
 public class ExtractShortRoadLinkInSameRoad {
 	public static void main(String[] args) {

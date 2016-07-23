@@ -1,6 +1,9 @@
+package dao;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import util.Config;
 
 public class RoadLink {
 	public int speed_upbound, speed_lowbound, lane, direction, line, stake_direction = 0;
@@ -11,7 +14,7 @@ public class RoadLink {
 	public List<LonLat> lonlat_list;
 	public List<String> next_ID, pre_ID;
 
-	RoadLink(String line) {
+	public RoadLink(String line) {
 		String[] line_array = line.split("\",\"|\"");
 		int[] speed = RoadLink.speed_judge(Integer.valueOf(line_array[25]));
 		speed_lowbound = speed[0];
@@ -26,7 +29,7 @@ public class RoadLink {
 		road_attribute = RoadLink.judge_Road_attribute(line_array[4]);
 	}
 
-	RoadLink(String[] line_array) {
+	public RoadLink(String[] line_array) {
 		int[] speed = RoadLink.speed_judge(Integer.valueOf(line_array[25]));
 		speed_lowbound = speed[0];
 		speed_upbound = speed[1];

@@ -1,3 +1,4 @@
+package dao;
 
 public class Tachometer {
 	public String id,highway_ID;
