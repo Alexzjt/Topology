@@ -3,7 +3,7 @@ package dao;
 import util.Config;
 
 public class LonLat {
-	public static double x_pi=3.14159265358979324 * 3000.0 / 180.0;
+	public static double x_pi=Math.PI * 3000.0 / 180.0;
 	public double longitude,latitude;
 	public LonLat(String str1,String str2){
 		if(str1.equals("null"))
@@ -51,13 +51,19 @@ public class LonLat {
 		return return_str.toString();
 	}
 	
-	public LonLat baiduTOgcj(){
+	/**
+	 * 百度地图坐标转gcj国家标准坐标
+	 * 
+	 */
+	public void  baiduTOgcj(){
 		double x=longitude-0.0065,y=latitude-0.006;
 		double z=Math.sqrt(x*x+y*y)- 0.00002 * Math.sin(y * x_pi);
 		double theta=Math.atan2(y, x) - 0.000003 * Math.cos(x * x_pi);
 		double gcjLon = z * Math.cos(theta);  
 		double gcjLat = z * Math.sin(theta);
-		return new LonLat(gcjLon, gcjLat);
+		longitude=gcjLon;
+		latitude=gcjLat;
 	}
+	
 	
 }

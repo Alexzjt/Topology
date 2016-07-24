@@ -51,4 +51,7 @@ public class Config {
 	public static String TOLL_DATA_ANALYSIS="D:\\zjt\\2015年收费数据解析\\2015-12-01.csv";
 	public static String TOLL_DATA_UNKNOWN="D:\\zjt\\2015年未知收费站\\2015-12-01.csv";
 	public static String ROADLINK_TOPOLOGY_29="D:\\zjt\\四维图新\\29省路网拓扑\\";
+	//////////////////////////////////////////////////////////////////////////
+	public static String NATIONAL_BOUNDARY_DIR="C:\\Users\\lirun\\Desktop\\china\\";
+	public static String NATIONAL_BOUNDARY_OUTPUT="C:\\Users\\lirun\\Desktop\\chinaGridCode";
 }

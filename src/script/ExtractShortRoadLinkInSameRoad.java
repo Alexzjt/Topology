@@ -1,4 +1,4 @@
-package Script;
+package script;
 import java.io.*;
 
 import dao.RoadLink;

@@ -1,4 +1,4 @@
-package Script;
+package script;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
