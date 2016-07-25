@@ -24,6 +24,10 @@ public class LonLat {
 		longitude=Double.valueOf(array[0]);
 		latitude=Double.valueOf(array[1]);
 	}
+	public LonLat(String[] array){
+		longitude=Double.valueOf(array[0]);
+		latitude=Double.valueOf(array[1]);
+	}
 	private static double rad(double d)
 	{
 	   return d * Math.PI / 180.0;

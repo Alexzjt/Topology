@@ -34,4 +34,9 @@ public class GeographicGrid {
 	}
 	
 	
+	public String toStringLonLatGeographicCode(){
+		StringBuilder strBuilder=new StringBuilder(lonLat.toString());
+		strBuilder.append(",").append(geographicCode);
+		return strBuilder.toString();
+	}
 }

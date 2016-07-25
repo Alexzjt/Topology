@@ -53,5 +53,5 @@ public class Config {
 	public static String ROADLINK_TOPOLOGY_29="D:\\zjt\\ËÄÎ¬Í¼ÐÂ\\29Ê¡Â·ÍøÍØÆË\\";
 	//////////////////////////////////////////////////////////////////////////
 	public static String NATIONAL_BOUNDARY_DIR="C:\\Users\\lirun\\Desktop\\china\\";
-	public static String NATIONAL_BOUNDARY_OUTPUT="C:\\Users\\lirun\\Desktop\\chinaGridCode";
+	public static String NATIONAL_BOUNDARY_OUTPUT="C:\\Users\\lirun\\Desktop\\chinaGridCode\\";
 }
