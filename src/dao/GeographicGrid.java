@@ -18,7 +18,7 @@ public class GeographicGrid {
 	 */
 	public GeographicGrid(LonLat lonLatGCJ){
 		lonLat=lonLatGCJ;
-		double lonCode_Double=lonLat.latitude-60;
+		double lonCode_Double=lonLat.longitude-60;
 		double latCode_Double=lonLat.latitude*1.5;
 		lonCode=(int)lonCode_Double;
 		latCode=(int)latCode_Double;
@@ -28,8 +28,8 @@ public class GeographicGrid {
 		y1=(int)y1_Double;
 		x2=(int)((x1_Double-x1)*8);
 		y2=(int)((y1_Double-y1)*8);
-		StringBuilder stringBuilder=new StringBuilder(latCode);
-		stringBuilder.append(lonCode).append(y1).append(x1).append(y2).append(x2);
+		StringBuilder stringBuilder=new StringBuilder(String.valueOf(latCode));
+		stringBuilder.append(String.valueOf(lonCode)).append(String.valueOf(y1)).append(String.valueOf(x1)).append(String.valueOf(y2)).append(String.valueOf(x2));
 		geographicCode=stringBuilder.toString();
 	}
 	
