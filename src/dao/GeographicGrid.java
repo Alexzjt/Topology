@@ -1,8 +1,5 @@
 package dao;
 
-import org.omg.PortableServer.ServantActivator;
-
-import jdk.nashorn.internal.objects.annotations.Constructor;
 
 public class GeographicGrid {
 	public LonLat lonLat;
