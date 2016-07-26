@@ -54,4 +54,7 @@ public class Config {
 	//////////////////////////////////////////////////////////////////////////
 	public static String NATIONAL_BOUNDARY_DIR="C:\\Users\\lirun\\Desktop\\china\\";
 	public static String NATIONAL_BOUNDARY_OUTPUT="C:\\Users\\lirun\\Desktop\\chinaGridCode\\";
+	/////////////////////////////////////////////////////////////////////////////
+	public static String ADMINISTRARIVE_DIVISION_FILE_PATH="E:\\BaiduYunDownload\\行政区划.txt"; 
+	public static String ADMINISTRARIVE_DIVISION_FILE_OUTPUT="E:\\BaiduYunDownload\\行政区划after.txt";
 }

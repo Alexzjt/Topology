@@ -7,8 +7,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.List;
 
-import com.sun.corba.se.spi.orb.StringPair;
-
 import dao.GeographicGrid;
 import dao.LonLat;
 import util.Config;
