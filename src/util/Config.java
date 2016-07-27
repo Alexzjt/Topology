@@ -57,4 +57,6 @@ public class Config {
 	/////////////////////////////////////////////////////////////////////////////
 	public static String ADMINISTRARIVE_DIVISION_FILE_PATH="E:\\BaiduYunDownload\\行政区划.txt"; 
 	public static String ADMINISTRARIVE_DIVISION_FILE_OUTPUT="E:\\BaiduYunDownload\\行政区划after.txt";
+	//////////////////////////////////////////////////////////////////////////////
+	public static String GEOGRID_ADMIN_PROVINCE_MATCH_OUTPUT="";
 }
