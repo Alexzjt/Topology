@@ -5,10 +5,30 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 
 import java.io.FileWriter;
+import java.util.HashMap;
 
 import util.Config;
 
 public class AdministrativeDivision {
+	public static HashMap<String, String> getPinyinCodeNameHash(String path){
+		HashMap<String, String> pinyin_ADcode_Name=new HashMap<String, String>();
+		try {
+			BufferedReader reader =new BufferedReader(new FileReader(path));
+			String line;
+			while((line=reader.readLine())!=null){
+				String[] line_array=line.split(",");
+				pinyin_ADcode_Name.put(line_array[0], line.replace(line_array[0], "").trim());
+			}
+			reader.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return pinyin_ADcode_Name;
+	}
+	
+	
+	
 	public static void main(String[] args) {
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(
