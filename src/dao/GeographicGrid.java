@@ -33,10 +33,36 @@ public class GeographicGrid {
 		geographicCode=stringBuilder.toString();
 	}
 	
+	/**
+	 * 传入地理网格号码，解析经纬度等。此处给出的经纬度是网格左上角的。
+	 * @param code
+	 */
+	public GeographicGrid(String code){
+		geographicCode=code;
+		if(code.length()==6){
+			x2=0;
+			y2=0;
+		}else{
+			x2=code.charAt(7)-'0';
+			y2=code.charAt(6)-'0';
+		}
+		x1=code.charAt(5)-'0';
+		y1=code.charAt(4)-'0';
+		lonCode=Integer.valueOf(code.substring(2,4));
+		latCode=Integer.valueOf(code.substring(0,2));
+		double lon=(double)lonCode+60.0+0.125*x1+0.015625*x2;
+		double lat=(double)latCode*2.0/3.0+0.125*y1+0.015625*y2;
+		lonLat=new LonLat(lon,lat);
+	}
 	
 	public String toStringLonLatGeographicCode(){
 		StringBuilder strBuilder=new StringBuilder(lonLat.toString());
 		strBuilder.append(",").append(geographicCode);
 		return strBuilder.toString();
 	}
+	
+//	public static void main(String[] args){
+//		GeographicGrid test=new GeographicGrid("46432354");
+//		System.out.print(test.toStringLonLatGeographicCode());
+//	}
 }
