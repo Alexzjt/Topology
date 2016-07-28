@@ -7,6 +7,12 @@ import java.util.List;
 import com.sun.corba.se.spi.orb.StringPair;
 
 public class FileUtil {
+	
+	/**
+	 * 工具类的方法，传入文件夹的目录，递归的从文件夹中获取所有文件的绝对路径，包括子目录的所有文件，以List的形式返回
+	 * @param dir_path
+	 * @return list
+	 */
 	public static List<String> getAbsolutePathFromDIR(String dir_path){
 		File dir=new File(dir_path);
 		if(!dir.exists())

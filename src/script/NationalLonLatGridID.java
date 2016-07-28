@@ -15,8 +15,9 @@ import util.FileUtil;
 public class NationalLonLatGridID {
 	public static void main(String[] args){
 		List<String> paths=FileUtil.getAbsolutePathFromDIR(Config.NATIONAL_BOUNDARY_DIR);
-		try {
+		
 			for(String path : paths){
+				try {
 				BufferedReader reader=new BufferedReader(new FileReader(path));
 				String writer_file_path=path.replace(Config.NATIONAL_BOUNDARY_DIR, Config.NATIONAL_BOUNDARY_OUTPUT);
 				File reader_file=new File(path);
@@ -48,10 +49,13 @@ public class NationalLonLatGridID {
 				}
 				reader.close();
 				writer.close();
+				} catch (Exception e) {
+					// TODO: handle exception
+					System.out.println(path);
+					//e.printStackTrace();
+					
+				}
 			}
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
+		
 	}
 }
