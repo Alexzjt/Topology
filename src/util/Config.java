@@ -59,5 +59,6 @@ public class Config {
 	public static String ADMINISTRARIVE_DIVISION_FILE_OUTPUT="E:\\BaiduYunDownload\\行政区划after.txt";
 	//////////////////////////////////////////////////////////////////////////////
 	public static String GEOGRID_ADMIN_PROVINCE_MATCH_OUTPUT="D:\\zjt\\网约车实验结果\\地理网格与行政区划.csv";
+	public static String LONLAT_GEOGRID_ADMIN_PROVINCE_MATCH_OUTPUT="D:\\zjt\\网约车实验结果\\经纬度地理网格与行政区划.csv";
 	public static String PINYIN_CODE_NAME_PATH="D:\\zjt\\网约车实验结果\\省级行政区划代码拼音.txt";
 }
