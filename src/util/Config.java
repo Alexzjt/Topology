@@ -56,6 +56,7 @@ public class Config {
 	public static String NATIONAL_BOUNDARY_OUTPUT="D:\\zjt\\区县边界经纬度\\chinaGridCode\\";
 	public static String BEIJING_GRID="D:\\zjt\\网约车实验结果\\北京6位网格.csv";
 	public static String BEIJING_BOUNDARY_DIR="D:\\zjt\\区县边界经纬度\\chinaGridCode\\北京市\\";
+	public static String BEIJING_MATCH="D:\\zjt\\网约车实验结果\\北京8位网格匹配.csv";
 	/////////////////////////////////////////////////////////////////////////////
 	public static String ADMINISTRARIVE_DIVISION_FILE_PATH="E:\\BaiduYunDownload\\行政区划.txt"; 
 	public static String ADMINISTRARIVE_DIVISION_FILE_OUTPUT="E:\\BaiduYunDownload\\行政区划after.txt";
