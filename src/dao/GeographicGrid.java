@@ -1,5 +1,8 @@
 package dao;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class GeographicGrid {
 	public LonLat lonLat;
@@ -55,10 +58,47 @@ public class GeographicGrid {
 		lonLat=new LonLat(lon,lat);
 	}
 	
+	/**
+	 * 传入地理网格号码，以及网格的x2和y2坐标
+	 * 解析经纬度等。此处给出的经纬度是网格左上角的。
+	 * @param code
+	 */
+	public GeographicGrid(String code,int x2,int y2){
+		geographicCode=code+String.valueOf(y2)+String.valueOf(x2);
+		this.x2=x2;
+		this.y2=y2;
+		x1=code.charAt(5)-'0';
+		y1=code.charAt(4)-'0';
+		lonCode=Integer.valueOf(code.substring(2,4));
+		latCode=Integer.valueOf(code.substring(0,2));
+		double lon=(double)lonCode+60.0+0.125*x1+0.0125*x2;
+		double lat=(double)latCode*2.0/3.0+0.125*y1+0.0125*y2;
+		lonLat=new LonLat(lon,lat);
+	}
+	
+	/**
+	 * 不是纯粹的重写toString方法，因为只输出了经纬度和网格号
+	 * @return 经度,纬度,网格号
+	 */
 	public String toStringLonLatGeographicCode(){
 		StringBuilder strBuilder=new StringBuilder(lonLat.toString());
 		strBuilder.append(",").append(geographicCode);
 		return strBuilder.toString();
+	}
+	
+	/**
+	 * 传入6位编码，返回从00到99的100个网格的list
+	 * @param code
+	 * @return List
+	 */
+	public static List<GeographicGrid> getGridListFrom6Code(String code){
+		List<GeographicGrid> result=new ArrayList<GeographicGrid>(101);
+		for(int i=0;i<=9;i++){
+			for(int j=0;j<9;j++){
+				result.add(new GeographicGrid(code, i, j));
+			}
+		}
+		return result;
 	}
 	
 //	public static void main(String[] args){

@@ -1,6 +1,12 @@
 package dao;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.List;
+
+import com.sun.corba.se.spi.orb.StringPair;
 
 import util.Config;
 
@@ -258,5 +264,23 @@ public class LonLat {
 			return true;
 		} else
 			return false;
+	}
+	
+	/**
+	 * 传入文件路径,经度所在字段,纬度所在字段，字段编号从0开始。返回该文件中的经纬度List
+	 * @param path
+	 * @return List
+	 * @throws Exception 
+	 */
+	public static List<LonLat> getLonLatListFromFile(String path,int lon_location,int lat_location) throws Exception{
+		BufferedReader reader = new BufferedReader(new FileReader(path));
+		String line;
+		List<LonLat> result=new ArrayList<LonLat>(50); //这块的List大小是随便设的，设稍微大一点扩展起来快些
+		while((line=reader.readLine())!=null){
+			String[] array=line.split(",");
+			result.add(new LonLat(array[lon_location],array[lat_location]));
+		}
+		reader.close();
+		return result;
 	}
 }

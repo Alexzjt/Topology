@@ -52,8 +52,10 @@ public class Config {
 	public static String TOLL_DATA_UNKNOWN="D:\\zjt\\2015年未知收费站\\2015-12-01.csv";
 	public static String ROADLINK_TOPOLOGY_29="D:\\zjt\\四维图新\\29省路网拓扑\\";
 	//////////////////////////////////////////////////////////////////////////
-	public static String NATIONAL_BOUNDARY_DIR="C:\\Users\\zhangjingtao\\Desktop\\china\\";
-	public static String NATIONAL_BOUNDARY_OUTPUT="C:\\Users\\zhangjingtao\\Desktop\\chinaGridCode\\";
+	public static String NATIONAL_BOUNDARY_DIR="D:\\zjt\\区县边界经纬度\\china\\";
+	public static String NATIONAL_BOUNDARY_OUTPUT="D:\\zjt\\区县边界经纬度\\chinaGridCode\\";
+	public static String BEIJING_GRID="D:\\zjt\\网约车实验结果\\北京6位网格.csv";
+	public static String BEIJING_BOUNDARY_DIR="D:\\zjt\\区县边界经纬度\\chinaGridCode\\北京市\\";
 	/////////////////////////////////////////////////////////////////////////////
 	public static String ADMINISTRARIVE_DIVISION_FILE_PATH="E:\\BaiduYunDownload\\行政区划.txt"; 
 	public static String ADMINISTRARIVE_DIVISION_FILE_OUTPUT="E:\\BaiduYunDownload\\行政区划after.txt";
