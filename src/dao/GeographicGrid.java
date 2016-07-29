@@ -94,7 +94,7 @@ public class GeographicGrid {
 	public static List<GeographicGrid> getGridListFrom6Code(String code){
 		List<GeographicGrid> result=new ArrayList<GeographicGrid>(101);
 		for(int i=0;i<=9;i++){
-			for(int j=0;j<9;j++){
+			for(int j=0;j<=9;j++){
 				result.add(new GeographicGrid(code, i, j));
 			}
 		}

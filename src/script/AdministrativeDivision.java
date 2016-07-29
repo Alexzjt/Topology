@@ -58,8 +58,8 @@ public class AdministrativeDivision {
 				} else {
 					StringBuilder stringBuilder = new StringBuilder(
 							line_array[0]);
-					stringBuilder.append(",").append(province==null?"":province).append(city==null?"":city)
-							.append(line_array[1]).append("\r\n");
+					stringBuilder.append(",").append(province==null?"":province).append(",").append(city==null?"":city)
+							.append(",").append(line_array[1]).append("\r\n");
 					writer.write(stringBuilder.toString());
 				}
 			}
