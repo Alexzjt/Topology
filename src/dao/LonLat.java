@@ -293,4 +293,17 @@ public class LonLat {
 		reader.close();
 		return result;
 	}
+	
+	public static boolean contains( LonLat p,List<LonLat> points) 
+	{
+	   boolean result = false;
+	   for( int i = 0; i < points.size() - 1; i++ )
+	   {
+	      if( ( ( ( points.get(i+1).latitude <= p.latitude ) && ( p.latitude < points.get(i).latitude ) ) || ( ( points.get(i).latitude <= p.latitude ) && ( p.latitude < points.get(i+1).latitude ) ) ) && ( p.longitude < ( points.get(i).longitude - points.get(i+1).longitude ) * ( p.latitude - points.get(i+1).latitude ) / ( points.get(i).latitude - points.get(i+1).latitude ) + points.get(i+1).longitude ) )
+	      {
+	         result = !result;
+	      }
+	   }
+	   return result;
+	}
 }
