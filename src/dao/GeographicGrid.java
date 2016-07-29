@@ -26,8 +26,8 @@ public class GeographicGrid {
 		double y1_Double=(latCode_Double-latCode)*8;
 		x1=(int)x1_Double;
 		y1=(int)y1_Double;
-		x2=(int)((x1_Double-x1)*8);
-		y2=(int)((y1_Double-y1)*8);
+		x2=(int)((x1_Double-x1)*10);
+		y2=(int)((y1_Double-y1)*10);
 		StringBuilder stringBuilder=new StringBuilder(String.valueOf(latCode));
 		stringBuilder.append(String.valueOf(lonCode)).append(String.valueOf(y1)).append(String.valueOf(x1)).append(String.valueOf(y2)).append(String.valueOf(x2));
 		geographicCode=stringBuilder.toString();
@@ -50,8 +50,8 @@ public class GeographicGrid {
 		y1=code.charAt(4)-'0';
 		lonCode=Integer.valueOf(code.substring(2,4));
 		latCode=Integer.valueOf(code.substring(0,2));
-		double lon=(double)lonCode+60.0+0.125*x1+0.015625*x2;
-		double lat=(double)latCode*2.0/3.0+0.125*y1+0.015625*y2;
+		double lon=(double)lonCode+60.0+0.125*x1+0.0125*x2;
+		double lat=(double)latCode*2.0/3.0+0.125*y1+0.0125*y2;
 		lonLat=new LonLat(lon,lat);
 	}
 	
