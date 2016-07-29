@@ -124,7 +124,7 @@ public class LonLat {
 	 * @return
 	 */
 	public static double getMinLongitude(List<LonLat> list) {
-		double number = 0;
+		double number = 500;  //先把值设大一点
 		for (LonLat lonLat : list) {
 			if (lonLat.longitude < number)
 				number = lonLat.longitude;
@@ -154,7 +154,7 @@ public class LonLat {
 	 * @return
 	 */
 	public static double getMinLatitude(List<LonLat> list) {
-		double number = 0;
+		double number = 500;  //先把值设大一点
 		for (LonLat lonLat : list) {
 			if (lonLat.latitude < number)
 				number = lonLat.latitude;
@@ -230,9 +230,14 @@ public class LonLat {
 	 */
 	public static int IsIntersectAntLonLat(LonLat lonLat, LonLat lonLat1,
 			LonLat lonLat2) {
-		return IsIntersectAnt(lonLat.longitude, lonLat.latitude,
+		
+		int result=IsIntersectAnt(lonLat.longitude, lonLat.latitude,
 				lonLat1.longitude, lonLat1.latitude, lonLat2.longitude,
 				lonLat2.latitude);
+		System.out.println(lonLat.longitude+","+lonLat.latitude+","+
+				lonLat1.longitude+","+lonLat1.latitude+","+ lonLat2.longitude+","+
+				lonLat2.latitude+","+result);
+		return result;
 	}
 
 	/**

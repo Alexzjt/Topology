@@ -54,15 +54,15 @@ public class GeoGridMatchAdminDivision {
 				for(Iterator<String> iterator=name_LonLatList_hash.keySet().iterator();iterator.hasNext();){
 					String path=iterator.next();
 					if(LonLat.PointInPolygon(grid.lonLat, name_LonLatList_hash.get(path))){
-						writer.write(grid.toStringLonLatGeographicCode()+","+path_adminDivision_hash.get(path)+"\r\n");
+						//writer.write(grid.toStringLonLatGeographicCode()+","+path_adminDivision_hash.get(path)+"\r\n");
 						judge=true;
 						break;
 					}
 				}
-//				if(judge==false){
-//					//System.out.println(grid.geographicCode);
-//					writer.write(grid.toStringLonLatGeographicCode()+"\r\n");
-//				}
+				if(judge==false){
+					//System.out.println(grid.geographicCode);
+					writer.write(grid.toStringLonLatGeographicCode()+"\r\n");
+				}
 			}
 			writer.close();
 		} catch (Exception e) {
