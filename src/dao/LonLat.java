@@ -237,6 +237,7 @@ public class LonLat {
 
 	/**
 	 * 判断经纬度点是否一个经纬度集合的范围内。其实质就是判断点是否在多边形内部
+	 * 
 	 * @param lonLat
 	 * @param list
 	 * @return
@@ -259,26 +260,30 @@ public class LonLat {
 			}
 			nCount += nFlag;
 		}
+		nCount += IsIntersectAntLonLat(lonLat, list.get(list.size() - 1),
+				list.get(0));
 		if (nCount % 2 == 1) // 点在多边形内
 		{
 			return true;
 		} else
 			return false;
 	}
-	
+
 	/**
 	 * 传入文件路径,经度所在字段,纬度所在字段，字段编号从0开始。返回该文件中的经纬度List
+	 * 
 	 * @param path
 	 * @return List
-	 * @throws Exception 
+	 * @throws Exception
 	 */
-	public static List<LonLat> getLonLatListFromFile(String path,int lon_location,int lat_location) throws Exception{
+	public static List<LonLat> getLonLatListFromFile(String path,
+			int lon_location, int lat_location) throws Exception {
 		BufferedReader reader = new BufferedReader(new FileReader(path));
 		String line;
-		List<LonLat> result=new ArrayList<LonLat>(50); //这块的List大小是随便设的，设稍微大一点扩展起来快些
-		while((line=reader.readLine())!=null){
-			String[] array=line.split(",");
-			result.add(new LonLat(array[lon_location],array[lat_location]));
+		List<LonLat> result = new ArrayList<LonLat>(50); // 这块的List大小是随便设的，设稍微大一点扩展起来快些
+		while ((line = reader.readLine()) != null) {
+			String[] array = line.split(",");
+			result.add(new LonLat(array[lon_location], array[lat_location]));
 		}
 		reader.close();
 		return result;

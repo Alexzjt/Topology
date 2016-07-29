@@ -50,13 +50,19 @@ public class GeoGridMatchAdminDivision {
 			}
 			BufferedWriter writer=new BufferedWriter(new FileWriter(Config.BEIJING_MATCH));
 			for(GeographicGrid grid : gridList){
+				boolean judge=false;
 				for(Iterator<String> iterator=name_LonLatList_hash.keySet().iterator();iterator.hasNext();){
 					String path=iterator.next();
 					if(LonLat.PointInPolygon(grid.lonLat, name_LonLatList_hash.get(path))){
 						writer.write(grid.toStringLonLatGeographicCode()+","+path_adminDivision_hash.get(path)+"\r\n");
+						judge=true;
 						break;
 					}
 				}
+//				if(judge==false){
+//					//System.out.println(grid.geographicCode);
+//					writer.write(grid.toStringLonLatGeographicCode()+"\r\n");
+//				}
 			}
 			writer.close();
 		} catch (Exception e) {

@@ -54,7 +54,7 @@ public class GeographicGrid {
 		lonCode=Integer.valueOf(code.substring(2,4));
 		latCode=Integer.valueOf(code.substring(0,2));
 		double lon=(double)lonCode+60.0+0.125*x1+0.0125*x2;
-		double lat=(double)latCode*2.0/3.0+0.125*y1+0.0125*y2;
+		double lat=((double)latCode+0.125*y1+0.0125*y2)*2.0/3.0;
 		lonLat=new LonLat(lon,lat);
 	}
 	
@@ -72,7 +72,7 @@ public class GeographicGrid {
 		lonCode=Integer.valueOf(code.substring(2,4));
 		latCode=Integer.valueOf(code.substring(0,2));
 		double lon=(double)lonCode+60.0+0.125*x1+0.0125*x2;
-		double lat=(double)latCode*2.0/3.0+0.125*y1+0.0125*y2;
+		double lat=((double)latCode+0.125*y1+0.0125*y2)*2.0/3.0;
 		lonLat=new LonLat(lon,lat);
 	}
 	
@@ -101,8 +101,10 @@ public class GeographicGrid {
 		return result;
 	}
 	
-//	public static void main(String[] args){
-//		GeographicGrid test=new GeographicGrid("46432354");
-//		System.out.print(test.toStringLonLatGeographicCode());
-//	}
+	public static void main(String[] args){
+		GeographicGrid test=new GeographicGrid("60561264");
+		System.out.println(test.toStringLonLatGeographicCode());
+		GeographicGrid test2=new GeographicGrid(test.lonLat);
+		System.out.println(test2.toStringLonLatGeographicCode());
+	}
 }
