@@ -118,11 +118,11 @@ public class RoadLink {
 	public static char judge_Road_attribute(String kind) {
 		String[] kind_array = kind.split("");
 		if (kind.length() < 5) {
-			return RoadLink.judge_Road_char(kind_array[4]);
+			return RoadLink.judge_Road_char(kind_array[3]);
 		} else if (kind.length() >= 5 && kind.length() < 10) {
-			return RoadLink.judge_Road_char(kind_array[4], kind_array[9]);
+			return RoadLink.judge_Road_char(kind_array[3], kind_array[8]);
 		} else if (kind.length() >= 10 && kind.length() < 15) {
-			return RoadLink.judge_Road_char(kind_array[4], kind_array[9], kind_array[14]);
+			return RoadLink.judge_Road_char(kind_array[3], kind_array[8], kind_array[13]);
 		}
 		return 'G';
 	}

@@ -1,6 +1,8 @@
 package dao;
 import java.util.List;
 
+import generateTopology.Main;
+
 public class StationInMap {
 	public String poi_ID,name,roadlink_ID,in_out;
 	public LonLat lonLat;
@@ -16,7 +18,7 @@ public class StationInMap {
 	@Override
 	public String toString() {
 		StringBuilder str=new StringBuilder(poi_ID);
-		str.append(",").append(name).append(",").append(lonLat.toString()).append(",").append(in_out);
+		str.append(",").append(Main.fullWidth2halfWidth(name)).append(",").append(lonLat.toString()).append(",").append(in_out);
 		return str.toString();
 	}
 	public static String listAddSeparator(List<String> list){
