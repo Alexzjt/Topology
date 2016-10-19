@@ -16,21 +16,22 @@ import java.util.HashMap;
  */
 public class SplitTollDataToRoadLink {
 	public static void main(String[] args){
-		HashMap<String, Integer> roadlink_count_Map=new HashMap<String, Integer>();
+		HashMap<String, HashMap<String, Integer>> stringHashMap= new HashMap<String, HashMap<String, Integer>>();
+		//HashMap<String, Integer> roadlink_count_Map=new HashMap<String, Integer>();
 		HashMap<String, String[]> station_poi_Map=new HashMap<String, String[]>();
 		HashMap<String, String> poi_shortestPath_Map=new HashMap<String, String>();
 		HashMap<String, Double> poi_SPcost_Map=new HashMap<String,Double>();
 		String tollDataPath ="G:\\zjt\\2016年10月13日拆分收费信息实验用\\0419.csv";
 		String staionPOIPath ="G:\\zjt\\2016年10月13日拆分收费信息实验用\\stationPOI.csv";
 		String spPath ="G:\\zjt\\2016年10月13日拆分收费信息实验用\\shandong.csv";
-		String outputPath ="G:\\zjt\\2016年10月13日拆分收费信息实验用\\output\\result.csv";
+		String outputPath ="G:\\zjt\\2016年10月13日拆分收费信息实验用\\output\\";
 		BufferedReader tollDataReader=null,staionPOIReader=null,spReader=null;
 		BufferedWriter writer=null;
 		try {
 			tollDataReader=new BufferedReader(new InputStreamReader(new FileInputStream(tollDataPath), "UTF-8"));
 			staionPOIReader=new BufferedReader(new InputStreamReader(new FileInputStream(staionPOIPath), "UTF-8"));
 			spReader=new BufferedReader(new InputStreamReader(new FileInputStream(spPath), "UTF-8"));
-			writer=new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputPath),"UTF-8"));
+			//writer=new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputPath),"UTF-8"));
 			String line,string;
 			while((line=staionPOIReader.readLine())!=null){
 				String[] array=line.split(",");
@@ -49,8 +50,24 @@ public class SplitTollDataToRoadLink {
 				}
 				
 			}
+			String date=null;
+			HashMap<String, Integer> map=null;
 			while((line=tollDataReader.readLine())!=null){
 				String[] array=line.split(",");
+				String date_time=array[6].substring(0,13);
+				if(date==null){
+					date=date_time;
+					map=new HashMap<>();
+				}
+				else if(date!=date_time){
+					stringHashMap.put(date, map);
+					date=date_time;
+					if(stringHashMap.containsKey(date)){
+						map=stringHashMap.get(date);
+					}
+					else
+						map=new HashMap<>();
+				}
 				String key=getSPkey(array[5], array[7], station_poi_Map, poi_SPcost_Map);
 				if(key==null)
 					continue;
@@ -59,17 +76,23 @@ public class SplitTollDataToRoadLink {
 				String[] sp=poi_shortestPath_Map.get(key).split("\\|");
 				for(int index=0;index<sp.length-1;index++){
 					String key2=sp[index]+","+sp[index+1];
-					if(roadlink_count_Map.containsKey(key2)){
-						int value=roadlink_count_Map.get(key2);
-						roadlink_count_Map.put(key2, value+1);
+					if(map.containsKey(key2)){
+						int value=map.get(key2);
+						map.put(key2, value+1);
 					}
 					else{
-						roadlink_count_Map.put(key2,1);
+						map.put(key2,1);
 					}
 				}
 			}
-			for(String key : roadlink_count_Map.keySet()){
-				writer.write(key+","+roadlink_count_Map.get(key)+"\r\n");
+			stringHashMap.put(date, map);
+			for(String key : stringHashMap.keySet()){
+				map=stringHashMap.get(key);
+				writer=new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputPath+key+".csv"),"UTF-8"));
+				for(String key2 : map.keySet()){
+					writer.write(key2+","+map.get(key2)+"\r\n");
+				}
+				writer.close();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
