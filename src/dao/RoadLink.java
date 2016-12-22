@@ -109,7 +109,7 @@ public class RoadLink {
 	}
 
 	public static boolean judge_Ramp(String kind) {
-		if (kind.contains("000b")) {
+		if (kind.contains("000b")||kind.contains("0005")||kind.contains("0003")) {
 			return true;
 		}
 		return false;
